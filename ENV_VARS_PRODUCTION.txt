@@ -6,6 +6,7 @@ NEXT_PUBLIC_API_URL=https://devpulse-backend.learn-made.in
 ## Backend (Render)
 DEBUG=False
 ALLOWED_HOSTS=devpulse-backend.learn-made.in,.onrender.com
+DATABASE_URL=internal_connection_string_from_render
 CORS_ALLOWED_ORIGINS=https://devpulse.learn-made.in
 CSRF_TRUSTED_ORIGINS=https://devpulse.learn-made.in,https://devpulse-backend.learn-made.in
 MONGO_URI=<Your_MongoDB_Connection_String>
