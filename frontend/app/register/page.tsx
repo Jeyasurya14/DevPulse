@@ -21,8 +21,8 @@ export default function RegisterPage() {
                 body: JSON.stringify(formData),
             });
             router.push('/login');
-        } catch (error) {
-            alert('Registration failed. Username might be taken.');
+        } catch (error: any) {
+            alert(error.message || 'Registration failed');
         } finally {
             setLoading(false);
         }
