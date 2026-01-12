@@ -29,8 +29,15 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-default-key')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',') + ['.onrender.com', 'localhost', '127.0.0.1']
-ALLOWED_HOSTS = [host for host in ALLOWED_HOSTS if host]  # Cleanup empty strings
+ALLOWED_HOSTS = ["*"]
+
+# Application definition
+# ...
+
+# CORS Config
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = []
+CSRF_TRUSTED_ORIGINS = ["https://devpulse.learn-made.in", "https://*.onrender.com"]
 
 
 # Application definition
