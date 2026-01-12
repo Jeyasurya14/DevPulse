@@ -152,9 +152,10 @@ if not DEBUG:
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # CORS Config
+# CORS Config
 CORS_ALLOW_ALL_ORIGINS = os.getenv('CORS_ALLOW_ALL_ORIGINS', 'False') == 'True'
-CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', '').split(',') if os.getenv('CORS_ALLOWED_ORIGINS') else []
-CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', '').split(',') if os.getenv('CSRF_TRUSTED_ORIGINS') else []
+CORS_ALLOWED_ORIGINS = [origin.strip("/") for origin in os.getenv('CORS_ALLOWED_ORIGINS', '').split(',')] if os.getenv('CORS_ALLOWED_ORIGINS') else []
+CSRF_TRUSTED_ORIGINS = [origin.strip("/") for origin in os.getenv('CSRF_TRUSTED_ORIGINS', '').split(',')] if os.getenv('CSRF_TRUSTED_ORIGINS') else []
 CORS_ALLOW_CREDENTIALS = True
 
 # Razorpay
