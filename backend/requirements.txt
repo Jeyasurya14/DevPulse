@@ -9,3 +9,4 @@ python-dotenv
 gunicorn
 razorpay
 requests
+whitenoise
