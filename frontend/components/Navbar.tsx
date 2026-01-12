@@ -11,7 +11,7 @@ export default function Navbar() {
                         <Zap className="text-white fill-current" size={20} />
                     </div>
                     <span className="text-2xl font-bold text-slate-900 tracking-tight">
-                        DevPulse
+                        Learnmade
                     </span>
                 </div>
 

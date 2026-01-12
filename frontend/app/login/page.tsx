@@ -44,7 +44,7 @@ export default function LoginPage() {
                         <div className="p-2 bg-white rounded-xl shadow-lg">
                             <Zap className="text-blue-600 fill-current" size={28} />
                         </div>
-                        <h1 className="text-3xl font-bold tracking-tight">DevPulse</h1>
+                        <h1 className="text-3xl font-bold tracking-tight">Learnmade</h1>
                     </div>
                     <h2 className="text-5xl font-bold leading-tight mb-6">Engineering intelligence, amplified.</h2>
                     <p className="text-xl text-blue-100 font-medium leading-relaxed">Join thousands of forward-thinking companies building software faster and safer.</p>

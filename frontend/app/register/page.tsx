@@ -102,14 +102,14 @@ export default function RegisterPage() {
 
                 <div className="relative z-10 max-w-lg text-right text-white">
                     <div className="flex items-center justify-end gap-3 mb-8">
-                        <h1 className="text-3xl font-bold tracking-tight">DevPulse</h1>
+                        <h1 className="text-3xl font-bold tracking-tight">Learnmade</h1>
                         <div className="p-2 bg-blue-600 rounded-xl shadow-lg">
                             <Zap className="text-white fill-current" size={28} />
                         </div>
                     </div>
                     <h2 className="text-5xl font-bold leading-tight mb-6">Designed for scale.</h2>
                     <p className="text-xl text-slate-300 font-medium leading-relaxed">
-                        "DevPulse transformed how we calculate velocity. It's the command center every CTO dreams of."
+                        "Learnmade transformed how we calculate velocity. It's the command center every CTO dreams of."
                     </p>
                     <p className="mt-6 text-sm text-slate-400 font-bold uppercase tracking-wider">- Sarah J., VP Engineering at TechFlow</p>
                 </div>

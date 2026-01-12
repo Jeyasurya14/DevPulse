@@ -112,7 +112,7 @@ export default function Home() {
       <section className="py-24 bg-blue-600 text-white">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <h2 className="text-4xl font-bold mb-6">Ready to scale your engineering?</h2>
-          <p className="text-blue-100 text-xl mb-10">Join the world's most innovative teams using DevPulse today.</p>
+          <p className="text-blue-100 text-xl mb-10">Join the world's most innovative teams using Learnmade today.</p>
           <Link
             href="/register"
             className="inline-block bg-white text-blue-600 px-10 py-4 rounded-xl font-bold text-lg hover:bg-slate-50 transition-colors shadow-2xl shadow-slate-900/20"
@@ -131,7 +131,7 @@ export default function Home() {
                 <Zap className="text-white fill-current" size={16} />
               </div>
               <span className="text-xl font-bold text-white tracking-tight">
-                DevPulse
+                Learnmade
               </span>
             </div>
             <p>Empowering developers to build the future.</p>
@@ -163,7 +163,7 @@ export default function Home() {
           </div>
         </div>
         <div className="text-center pt-8 border-t border-slate-800">
-          <p>© 2026 DevPulse Inc. All rights reserved.</p>
+          <p>© 2026 Learnmade Inc. All rights reserved.</p>
         </div>
       </footer>
     </div>
