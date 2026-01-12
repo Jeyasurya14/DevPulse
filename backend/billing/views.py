@@ -74,20 +74,23 @@ class UsageStatsView(APIView):
         plan = profile.get("subscription_tier", "starter") if profile else "starter"
         
         # Define Limits
+        # Define Limits & Feature Flags
         limits = {
-            "starter": 2,
-            "pro": 1000, # Effectively unlimited
-            "business": 1000
+            "starter": { "projects": 2, "analytics": "basic", "ai_recommendations": False, "team_size": 1, "exclusive_content": False },
+            "pro": { "projects": 9999, "analytics": "advanced", "ai_recommendations": True, "team_size": 1, "exclusive_content": True },
+            "business": { "projects": 9999, "analytics": "advanced", "ai_recommendations": True, "team_size": 10, "exclusive_content": True }
         }
         
-        limit = limits.get(plan, 2)
+        plan_limits = limits.get(plan, limits["starter"])
         
         # Get Current Usage
         project_count = db.projects.count_documents({}) # Simplified: In prod filter by owner
         
         return Response({
             "plan": plan,
-            "projects_used": project_count,
-            "projects_limit": limit,
-            "upgrade_needed": project_count >= limit and plan == "starter"
+            "usage": {
+                "projects_used": project_count,
+            },
+            "limits": plan_limits,
+            "upgrade_needed": project_count >= plan_limits["projects"] and plan == "starter"
         })
