@@ -11,10 +11,11 @@ const Sidebar = () => {
         <aside className="w-64 bg-slate-900 text-white h-screen p-4 flex flex-col shadow-xl z-20">
             <div className="mb-10 px-2 mt-2">
                 <h1 className="text-2xl font-bold flex items-center gap-3 tracking-tight">
-                    <div className="bg-blue-500 p-1.5 rounded-lg">
+                    {/* <div className="bg-blue-500 p-1.5 rounded-lg">
                         <Zap size={20} className="text-white fill-current" />
-                    </div>
-                    DevPulse
+                    </div> */}
+                    <img src="/logo.png" alt="Learnmade Logo" className="h-8 w-auto object-contain" />
+                    {/* Learnmade */}
                 </h1>
             </div>
 
