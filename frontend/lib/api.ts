@@ -11,12 +11,13 @@ export async function fetchAPI(endpoint: string, options: RequestInit = {}) {
     });
 
     if (!res.ok) {
-        let errorMessage = `API Error: ${res.statusText}`;
+        let errorMessage = `API Error ${res.status}: ${res.statusText}`;
         try {
             const errorData = await res.json();
             errorMessage = errorData.error || errorMessage;
         } catch (e) {
-            // response was not json
+            // response was not json, helpful debugging
+            errorMessage += ` at ${endpoint}`;
         }
         throw new Error(errorMessage);
     }
