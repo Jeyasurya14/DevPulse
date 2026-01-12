@@ -10,3 +10,5 @@ gunicorn
 razorpay
 requests
 whitenoise
+psycopg2-binary
+dj-database-url
