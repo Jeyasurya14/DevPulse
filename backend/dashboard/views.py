@@ -60,3 +60,39 @@ class NoteList(APIView):
         del note['_id']
         return Response(note, status=status.HTTP_201_CREATED)
 
+class StatsView(APIView):
+    def get(self, request):
+        db = get_db_handle()
+        
+        # Real Backend Logic
+        total_goals = db.goals.count_documents({}) # Proxy for "Projects" for now
+        total_notes = db.collaboration_notes.count_documents({})
+        
+        # Calculate Mock Velocity based on completed goals
+        completed_goals = db.goals.count_documents({"status": "completed"})
+        velocity = completed_goals * 10 + 42 # Base baseline
+        
+        # Mock Active Members (Future: Count distinct authors in notes)
+        active_members = len(db.collaboration_notes.distinct("author")) or 1
+        
+        stats = {
+            "total_projects": total_goals,
+            "team_velocity": f"{velocity} pts",
+            "active_members": active_members,
+            "recent_activity": [
+                {"title": "System initialized", "time": "Just now", "type": "info"}
+            ] 
+        }
+        
+        # If we have real notes, use them as activity
+        recent_notes = list(db.collaboration_notes.find({}, {'_id': 0}).sort("created_at", -1).limit(3))
+        if recent_notes:
+            stats['recent_activity'] = []
+            for note in recent_notes:
+                stats['recent_activity'].append({
+                    "title": f"New note by {note.get('author')}",
+                    "time": "Recently", # Ideally parse timestamp
+                    "type": "success"
+                })
+
+        return Response(stats)
