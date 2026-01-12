@@ -1,0 +1,11 @@
+
+Django>=5.0.0
+djangorestframework
+django-cors-headers
+djangorestframework-simplejwt
+pymongo
+dnspython
+python-dotenv
+gunicorn
+razorpay
+requests
