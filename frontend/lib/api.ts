@@ -17,12 +17,15 @@ export async function fetchAPI(endpoint: string, options: RequestInit = {}) {
 
         let errorMessage = `API Error (${status}): ${statusText}`;
         try {
-            const errorData = await res.json();
-            errorMessage = errorData.error || errorMessage;
-        } catch (e) {
-            // response was not json, read text body
             const textBody = await res.text();
-            errorMessage += ` | Body: ${textBody.substring(0, 150)}`;
+            try {
+                const errorData = JSON.parse(textBody);
+                errorMessage = errorData.error || errorMessage;
+            } catch (e) {
+                errorMessage += ` | Body: ${textBody.substring(0, 150)}`;
+            }
+        } catch (e) {
+            errorMessage += ` | Body read failed`;
         }
         throw new Error(errorMessage);
     }
