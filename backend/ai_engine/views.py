@@ -12,3 +12,10 @@ class CodeAnalysisView(APIView):
         result = analyzer.analyze_snippet(code, language)
         
         return Response(result)
+
+from .recommendations import get_recommendations
+
+class RecommendationView(APIView):
+    def get(self, request):
+        recommendations = get_recommendations(request.user)
+        return Response(recommendations)
