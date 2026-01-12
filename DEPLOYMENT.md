@@ -57,8 +57,10 @@ Now that both services exist, we need to introduce them.
     *   Add your Render URL (without `https://`).
     *   *Example*: `devpulse-backend-xyz.onrender.com`
 3.  Update `CORS_ALLOWED_ORIGINS` and `CSRF_TRUSTED_ORIGINS`:
-    *   Add your **Vercel Frontend URL**.
-    *   *Example*: `https://devpulse-frontend.vercel.app`
+    *   Add your **Frontend URL** (e.g., your Vercel URL or Custom Domain).
+    *   **IMPORTANT**: Do NOT include a trailing slash.
+    *   *Correct*: `https://devpulse.learn-made.in`
+    *   *Incorrect*: `https://devpulse.learn-made.in/`
 4.  **Save Changes**. Render will redeploy automatically.
 
 ---
