@@ -1,0 +1,17 @@
+
+# Environment Variables
+.env
+.env.*
+*.env
+
+# Dependencies
+node_modules/
+venv/
+__pycache__/
+
+# IDEs
+.vscode/
+.idea/
+
+# Backend specific (if not covered in sub-repo)
+*.sqlite3
