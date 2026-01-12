@@ -20,8 +20,9 @@ export async function fetchAPI(endpoint: string, options: RequestInit = {}) {
             const errorData = await res.json();
             errorMessage = errorData.error || errorMessage;
         } catch (e) {
-            // response was not json, helpful debugging
-            errorMessage += ` at ${endpoint}`;
+            // response was not json, read text body
+            const textBody = await res.text();
+            errorMessage += ` | Body: ${textBody.substring(0, 150)}`;
         }
         throw new Error(errorMessage);
     }
