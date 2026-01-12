@@ -29,7 +29,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-default-key')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',') + ['.onrender.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',') + ['.onrender.com', 'devpulse-backend.learn-made.in', 'localhost', '127.0.0.1']
 ALLOWED_HOSTS = [host for host in ALLOWED_HOSTS if host]
 
 # Application definition
@@ -46,6 +46,7 @@ CSRF_TRUSTED_ORIGINS = [
     "https://devpulse.learn-made.in",
     "https://www.devpulse.learn-made.in",
     "https://*.onrender.com",
+    "https://devpulse-backend.learn-made.in",
 ]
 
 
