@@ -11,7 +11,11 @@ export async function fetchAPI(endpoint: string, options: RequestInit = {}) {
     });
 
     if (!res.ok) {
-        let errorMessage = `API Error ${res.status}: ${res.statusText}`;
+        // Handle Network Errors (CORS/Offline) which often have status 0 or empty statusText
+        const status = res.status || 0;
+        const statusText = res.statusText || 'Network Error (possibly CORS)';
+
+        let errorMessage = `API Error (${status}): ${statusText}`;
         try {
             const errorData = await res.json();
             errorMessage = errorData.error || errorMessage;
