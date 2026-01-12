@@ -11,7 +11,7 @@ export default function PrivacyPolicy() {
                     <p className="mb-4 text-sm text-slate-500">Last updated: January 12, 2026</p>
 
                     <h2 className="text-2xl font-bold mt-8 mb-4">1. Introduction</h2>
-                    <p>Welcome to DevPulse ("we," "our," or "us"). We are committed to protecting your personal information and your right to privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website and use our SaaS platform.</p>
+                    <p>Welcome to Learnmade ("we," "our," or "us"). We are committed to protecting your personal information and your right to privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website and use our SaaS platform.</p>
 
                     <h2 className="text-2xl font-bold mt-8 mb-4">2. Information We Collect</h2>
                     <p>We collect information that you provide strictly for the purpose of delivering our services:</p>

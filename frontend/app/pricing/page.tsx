@@ -33,7 +33,7 @@ export default function PricingPage() {
                 key: 'rzp_test_1DP5mmOlF5G5ag', // Public Key
                 amount: order.amount,
                 currency: order.currency,
-                name: "DevPulse",
+                name: "Learnmade",
                 description: `${planId.toUpperCase()} Subscription`,
                 order_id: order.id,
                 handler: async (response: any) => {

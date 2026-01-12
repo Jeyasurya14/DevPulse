@@ -11,19 +11,19 @@ export default function TermsAndConditions() {
                     <p className="mb-4 text-sm text-slate-500">Last updated: January 12, 2026</p>
 
                     <h2 className="text-2xl font-bold mt-8 mb-4">1. Agreement to Terms</h2>
-                    <p>By accessing or using DevPulse, you agree to be bound by these Terms and Conditions. If you disagree with any part of these terms, you may not access the service.</p>
+                    <p>By accessing or using Learnmade, you agree to be bound by these Terms and Conditions. If you disagree with any part of these terms, you may not access the service.</p>
 
                     <h2 className="text-2xl font-bold mt-8 mb-4">2. Subscription & Payments</h2>
                     <p>Some parts of the Service are billed on a subscription basis ("Subscription(s)"). You will be billed in advance on a recurring and periodic basis (monthly or annually) via Razorpay. Subscriptions automatically renew unless canceled at least 24 hours before the end of the billing cycle.</p>
 
                     <h2 className="text-2xl font-bold mt-8 mb-4">3. User Responsibilities</h2>
-                    <p>You differ to use the platform only for lawful purposes. You are responsible for maintaining the security of your account credentials. DevPulse is not liable for any loss or damage arising from your failure to protect your password.</p>
+                    <p>You differ to use the platform only for lawful purposes. You are responsible for maintaining the security of your account credentials. Learnmade is not liable for any loss or damage arising from your failure to protect your password.</p>
 
                     <h2 className="text-2xl font-bold mt-8 mb-4">4. Intellectual Property</h2>
-                    <p>The Service and its original content (excluding Content provided by you or other users), features, and functionality are and will remain the exclusive property of DevPulse and its licensors.</p>
+                    <p>The Service and its original content (excluding Content provided by you or other users), features, and functionality are and will remain the exclusive property of Learnmade and its licensors.</p>
 
                     <h2 className="text-2xl font-bold mt-8 mb-4">5. Limitation of Liability</h2>
-                    <p>In no event shall DevPulse, nor its directors, employees, partners, agents, suppliers, or affiliates, be liable for any indirect, incidental, special, consequential or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses.</p>
+                    <p>In no event shall Learnmade, nor its directors, employees, partners, agents, suppliers, or affiliates, be liable for any indirect, incidental, special, consequential or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses.</p>
 
                     <h2 className="text-2xl font-bold mt-8 mb-4">6. Changes</h2>
                     <p>We reserve the right, at our sole discretion, to modify or replace these Terms at any time. By continuing to access or use our Service after those revisions become effective, you agree to be bound by the revised terms.</p>

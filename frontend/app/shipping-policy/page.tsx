@@ -10,7 +10,7 @@ export default function ShippingPolicy() {
                 <div className="prose prose-slate max-w-none">
 
                     <h2 className="text-2xl font-bold mt-8 mb-4">1. Digital Nature of Goods</h2>
-                    <p>DevPulse is a Software-as-a-Service (SaaS) platform. We do not sell or ship physical goods. All services are delivered digitally via the internet.</p>
+                    <p>Learnmade is a Software-as-a-Service (SaaS) platform. We do not sell or ship physical goods. All services are delivered digitally via the internet.</p>
 
                     <h2 className="text-2xl font-bold mt-8 mb-4">2. Immediate Delivery</h2>
                     <p>Upon successful payment and registration, access to your paid features (e.g., Pro or Business tier features) is granted immediately. You will receive a confirmation email with your invoice and account details.</p>
