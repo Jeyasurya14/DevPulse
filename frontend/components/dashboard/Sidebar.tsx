@@ -9,17 +9,13 @@ import RecommendationWidget from './RecommendationWidget';
 const Sidebar = () => {
     return (
         <aside className="w-64 bg-slate-900 text-white h-screen p-4 flex flex-col shadow-xl z-20">
-            <div className="mb-10 px-2 mt-2">
-                <h1 className="text-2xl font-bold flex items-center gap-3 tracking-tight">
-                    {/* <div className="bg-blue-500 p-1.5 rounded-lg">
-                        <Zap size={20} className="text-white fill-current" />
-                    </div> */}
-                    <img src="/logo.png" alt="Learnmade Logo" className="h-8 w-auto object-contain" />
-                    {/* Learnmade */}
-                </h1>
+            <div className="mb-8 px-2 mt-2">
+                <Link href="/dashboard" className="flex items-center gap-3">
+                    <img src="/logo.png" alt="Learnmade" className="h-10 w-auto object-contain" />
+                </Link>
             </div>
 
-            <nav className="space-y-1 flex-1">
+            <nav className="space-y-1 flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-700">
                 <Link href="/dashboard" className="flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-600/20 hover:text-blue-400 text-slate-400 transition-all font-medium group">
                     <Home size={20} className="group-hover:text-blue-400 transition-colors" />
                     <span>Overview</span>

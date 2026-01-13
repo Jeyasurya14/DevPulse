@@ -50,13 +50,13 @@ export default function RecommendationWidget() {
             </h3>
             <div className="space-y-4">
                 {recommendations.map((rec) => (
-                    <div key={rec.id} className="bg-white p-4 rounded-lg border border-slate-100 shadow-sm flex items-start space-x-4 hover:shadow-md transition-shadow">
-                        <div className="bg-slate-50 p-2 rounded-lg">
+                    <div key={rec.id} className="bg-white p-4 rounded-lg border border-slate-100 shadow-sm flex flex-col sm:flex-row items-start sm:space-x-4 space-y-3 sm:space-y-0 hover:shadow-md transition-shadow">
+                        <div className="bg-slate-50 p-2 rounded-lg shrink-0">
                             {getIcon(rec.icon)}
                         </div>
-                        <div className="flex-1">
-                            <h4 className="font-bold text-slate-900 text-sm">{rec.title}</h4>
-                            <p className="text-xs text-slate-500 mt-1 mb-2">{rec.description}</p>
+                        <div className="flex-1 min-w-0">
+                            <h4 className="font-bold text-slate-900 text-sm truncate">{rec.title}</h4>
+                            <p className="text-xs text-slate-500 mt-1 mb-2 line-clamp-2">{rec.description}</p>
                             <Link href={rec.action} className="text-indigo-600 text-xs font-bold flex items-center hover:underline">
                                 Take Action <ArrowRight size={12} className="ml-1" />
                             </Link>

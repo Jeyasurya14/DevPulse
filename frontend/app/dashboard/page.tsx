@@ -1,6 +1,7 @@
 'use client';
 
 import Sidebar from '@/components/dashboard/Sidebar';
+import Link from 'next/link';
 import { Activity, Plus, Users, Zap, ArrowUpRight, Clock, Loader2, AlertCircle } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { fetchAPI } from '@/lib/api';
@@ -114,18 +115,18 @@ export default function DashboardPage() {
                                 <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500 rounded-full blur-3xl opacity-20 -mr-10 -mt-10"></div>
                                 <h3 className="font-bold text-lg mb-4 relative z-10">Quick Actions</h3>
                                 <div className="space-y-3 relative z-10">
-                                    <button className="w-full text-left bg-white/10 hover:bg-white/20 p-3 rounded-xl transition-colors flex items-center justify-between group">
+                                    <Link href="/dashboard/analysis" className="block w-full text-left bg-white/10 hover:bg-white/20 p-3 rounded-xl transition-colors flex items-center justify-between group">
                                         <span className="font-medium text-sm">Run Code Analysis</span>
                                         <ArrowUpRight size={16} className="opacity-50 group-hover:opacity-100 transition-opacity" />
-                                    </button>
-                                    <button className="w-full text-left bg-white/10 hover:bg-white/20 p-3 rounded-xl transition-colors flex items-center justify-between group">
+                                    </Link>
+                                    <Link href="/dashboard/collaboration" className="block w-full text-left bg-white/10 hover:bg-white/20 p-3 rounded-xl transition-colors flex items-center justify-between group">
                                         <span className="font-medium text-sm">Invite Member</span>
                                         <ArrowUpRight size={16} className="opacity-50 group-hover:opacity-100 transition-opacity" />
-                                    </button>
-                                    <button className="w-full text-left bg-white/10 hover:bg-white/20 p-3 rounded-xl transition-colors flex items-center justify-between group">
+                                    </Link>
+                                    <Link href="/dashboard/analytics" className="block w-full text-left bg-white/10 hover:bg-white/20 p-3 rounded-xl transition-colors flex items-center justify-between group">
                                         <span className="font-medium text-sm">View Reports</span>
                                         <ArrowUpRight size={16} className="opacity-50 group-hover:opacity-100 transition-opacity" />
-                                    </button>
+                                    </Link>
                                 </div>
 
                                 <div className="mt-8 pt-6 border-t border-white/10">
