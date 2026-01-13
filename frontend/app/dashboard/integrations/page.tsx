@@ -68,15 +68,19 @@ export default function IntegrationsPage() {
                 </div>
 
                 {error ? (
-                    <div className="flex flex-col items-center justify-center p-12 bg-red-50 rounded-2xl border border-red-100 text-center">
-                        <AlertCircle className="text-red-500 mb-4" size={48} />
-                        <h3 className="text-xl font-bold text-red-900 mb-2">Failed to load integrations</h3>
-                        <p className="text-red-600 mb-6">Something went wrong while fetching your data.</p>
+                    <div className="flex flex-col items-center justify-center p-12 bg-white rounded-3xl border border-slate-100 shadow-sm text-center animate-in fade-in zoom-in-95 duration-300">
+                        <div className="bg-red-50 p-4 rounded-full mb-4">
+                            <AlertCircle className="text-red-500" size={40} />
+                        </div>
+                        <h3 className="text-xl font-bold text-slate-900 mb-2">Service Unavailable</h3>
+                        <p className="text-slate-500 max-w-md mb-8">
+                            We couldn't retrieve your integrations. This might be due to a network interruption or maintenance.
+                        </p>
                         <button
                             onClick={() => mutate()}
-                            className="px-6 py-2 bg-red-600 text-white rounded-lg font-bold hover:bg-red-700 transition-colors"
+                            className="px-6 py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl font-bold transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
                         >
-                            Retry
+                            Retry Connection
                         </button>
                     </div>
                 ) : (

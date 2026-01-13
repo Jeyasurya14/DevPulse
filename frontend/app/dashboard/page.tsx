@@ -65,8 +65,20 @@ export default function DashboardPage() {
                 />
 
                 {error ? (
-                    <div className="p-6 bg-red-50 text-red-700 rounded-2xl border border-red-100 flex items-center gap-3">
-                        <AlertCircle /> Failed to load dashboard data. Please try again.
+                    <div className="flex flex-col items-center justify-center p-12 bg-white rounded-3xl border border-slate-100 shadow-sm text-center animate-in fade-in zoom-in-95 duration-300">
+                        <div className="bg-red-50 p-4 rounded-full mb-4">
+                            <AlertCircle className="text-red-500" size={40} />
+                        </div>
+                        <h3 className="text-xl font-bold text-slate-900 mb-2">Unable to Load Dashboard</h3>
+                        <p className="text-slate-500 max-w-md mb-8">
+                            We encountered a temporary issue connecting to the data service. This serves as a production safeguard.
+                        </p>
+                        <button
+                            onClick={() => window.location.reload()}
+                            className="px-6 py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl font-bold transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+                        >
+                            Retry Connection
+                        </button>
                     </div>
                 ) : (
                     <>

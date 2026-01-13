@@ -39,34 +39,6 @@ export async function fetchAPI(endpoint: string, options: RequestInit = {}) {
         return await res.json();
 
     } catch (e) {
-        // Fallback to Mock Data if API fails (Development/Demo Mode)
-        console.warn(`API Request to ${endpoint} failed. Falling back to mock data.`);
-
-        if (endpoint.includes('/dashboard/stats')) {
-            return {
-                projects: 12,
-                scans: 1450,
-                issues: 24,
-                apiUsage: 78,
-                team_velocity: "High",
-                active_members: 8,
-                recent_activity: [
-                    { title: "Project 'Alpha' created", time: "2 hours ago", type: "info" },
-                    { title: "Security Scan completed", time: "4 hours ago", type: "success" },
-                    { title: "New issue detected", time: "5 hours ago", type: "warning" },
-                    { title: "API Key rotated", time: "1 day ago", type: "info" }
-                ]
-            };
-        }
-
-        if (endpoint.includes('/integrations')) {
-            return [
-                { id: '1', name: 'GitHub', status: 'connected', last_sync: '10 mins ago', icon: 'github' },
-                { id: '2', name: 'Slack', status: 'disconnected', icon: 'slack' },
-                { id: '3', name: 'Jira', status: 'connected', last_sync: '1 hour ago', icon: 'jira' }
-            ];
-        }
-
         throw e;
     }
 }
