@@ -1,12 +1,15 @@
+
 'use client';
 
 import Sidebar from '@/components/dashboard/Sidebar';
 import NotificationBell from '@/components/dashboard/NotificationBell';
 import Link from 'next/link';
-import { Activity, Plus, Users, Zap, ArrowUpRight, Clock, Loader2, AlertCircle, LayoutDashboard, Code2, CreditCard } from 'lucide-react';
+import { Activity, Plus, Users, Zap, ArrowUpRight, Clock, Loader2, AlertCircle, LayoutDashboard, Code2, CreditCard, Sparkles, MessageSquare, BarChart } from 'lucide-react';
 import useSWR from 'swr';
 import { useState } from 'react';
 import { fetchAPI } from '@/lib/api';
+import PremiumStatCard from '@/components/dashboard/PremiumStatCard';
+import CreateProjectModal from '@/components/dashboard/CreateProjectModal';
 
 // SWR Fetcher
 const fetcher = (url: string) => fetchAPI(url);
@@ -25,35 +28,33 @@ interface DashboardStats {
     }[];
 }
 
-import CreateProjectModal from '@/components/dashboard/CreateProjectModal';
-
 export default function DashboardPage() {
-    // Zero Lag: SWR handles caching and revalidation
     const { data: stats, error, isLoading } = useSWR<DashboardStats>('/api/dashboard/stats/', fetcher, {
-        refreshInterval: 30000, // Background poll every 30s
-        revalidateOnFocus: false, // Don't aggressive revalidate on window focus
-        keepPreviousData: true // Show verified old data while fetching new
+        refreshInterval: 30000,
+        revalidateOnFocus: false,
+        keepPreviousData: true
     });
 
     const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
 
-    // ... imports
-
     return (
-        <div className="h-full bg-slate-50 text-slate-900 font-sans relative">
-            <main className="flex-1 p-4 md:p-8 overflow-y-auto h-full">
-                <header className="flex justify-between items-center mb-8">
+        <div className="h-full bg-slate-50/50 text-slate-900 font-sans relative">
+            <main className="flex-1 p-6 md:p-10 overflow-y-auto h-full scrollbar-none">
+                {/* Premium Header */}
+                <header className="flex flex-col md:flex-row md:justify-between md:items-center mb-10 gap-4">
                     <div>
-                        <h1 className="text-3xl font-bold text-slate-900 mb-2">Dashboard Overview</h1>
-                        <p className="text-slate-500">Welcome back! Here's what's happening today.</p>
+                        <h1 className="text-3xl font-extrabold text-slate-900 mb-1 tracking-tight">Dashboard Overview</h1>
+                        <p className="text-slate-500 font-medium">Welcome back! Here's your production summary.</p>
                     </div>
                     <div className="flex items-center gap-4">
-                        <NotificationBell />
+                        <div className="p-1.5 bg-white rounded-xl shadow-sm border border-slate-100">
+                            <NotificationBell />
+                        </div>
                         <button
                             onClick={() => setIsProjectModalOpen(true)}
-                            className="flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-lg font-medium transition-colors shadow-sm shadow-brand-200"
+                            className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl font-bold transition-all shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/40 hover:-translate-y-0.5"
                         >
-                            <Plus size={20} /> New Project
+                            <Plus size={20} className="stroke-[3]" /> New Project
                         </button>
                     </div>
                 </header>
@@ -64,62 +65,67 @@ export default function DashboardPage() {
                 />
 
                 {error ? (
-                    <div className="p-6 bg-red-50 text-red-700 rounded-xl border border-red-100 flex items-center gap-3">
+                    <div className="p-6 bg-red-50 text-red-700 rounded-2xl border border-red-100 flex items-center gap-3">
                         <AlertCircle /> Failed to load dashboard data. Please try again.
                     </div>
                 ) : (
                     <>
-                        {/* Stats Grid - Skeleton or Data */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                            <StatCard
+                        {/* Premium Stats Grid */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+                            <PremiumStatCard
                                 title="Total Projects"
                                 value={stats?.projects ?? 0}
-                                change="+12% from last month"
-                                icon={<LayoutDashboard size={24} className="text-brand-600" />}
+                                change="12%"
                                 trend="up"
+                                icon={<LayoutDashboard size={22} />}
+                                color="brand"
                                 isLoading={isLoading && !stats}
                             />
-                            <StatCard
-                                title="Code Analysis Scans"
+                            <PremiumStatCard
+                                title="Code Scans"
                                 value={stats?.scans ?? 0}
-                                change="+5% from last month"
-                                icon={<Code2 size={24} className="text-purple-600" />}
+                                change="5%"
                                 trend="up"
+                                icon={<Code2 size={22} />}
+                                color="purple"
                                 isLoading={isLoading && !stats}
                             />
-                            <StatCard
+                            <PremiumStatCard
                                 title="Issues Fixed"
                                 value={stats?.issues ?? 0}
-                                change="+18% from last month"
-                                icon={<Zap size={24} className="text-amber-500" />}
+                                change="18%"
                                 trend="up"
+                                icon={<Zap size={22} />}
+                                color="amber"
                                 isLoading={isLoading && !stats}
                             />
-                            <StatCard
+                            <PremiumStatCard
                                 title="API Usage"
                                 value={`${stats?.apiUsage ?? 0}%`}
-                                change="Within limits"
-                                icon={<CreditCard size={24} className="text-emerald-500" />}
+                                change="Healthy"
                                 trend="neutral"
+                                icon={<CreditCard size={22} />}
+                                color="emerald"
                                 isLoading={isLoading && !stats}
                             />
                         </div>
 
-                        {/* Activity & Quick Actions */}
-                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                            {/* Activity Feed */}
-                            <div className="lg:col-span-2 bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
-                                <h3 className="font-bold text-lg text-slate-900 mb-6 flex items-center gap-2">
-                                    <Clock size={20} className="text-slate-400" /> Recent Activity
+                        {/* Activity & Quick Actions Layout */}
+                        <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+
+                            {/* Activity Feed Timeline */}
+                            <div className="xl:col-span-2 bg-white rounded-3xl border border-slate-100 shadow-premium p-8 relative overflow-hidden">
+                                <h3 className="font-bold text-lg text-slate-900 mb-8 flex items-center gap-2">
+                                    <Clock size={20} className="text-indigo-500" /> recent activity
                                 </h3>
-                                <div className="space-y-6">
+
+                                <div className="space-y-0 relative before:absolute before:inset-0 before:ml-2.5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-200 before:to-transparent">
                                     {isLoading && !stats ? (
                                         [1, 2, 3].map(i => (
-                                            <div key={i} className="flex gap-4 animate-pulse">
-                                                <div className="w-2 h-2 rounded-full bg-slate-200 mt-2"></div>
+                                            <div key={i} className="flex gap-4 animate-pulse mb-8 relative z-10 pl-8">
                                                 <div className="space-y-2 flex-1">
-                                                    <div className="h-4 bg-slate-200 rounded w-1/3"></div>
-                                                    <div className="h-3 bg-slate-100 rounded w-1/4"></div>
+                                                    <div className="h-4 bg-slate-100 rounded w-1/3"></div>
+                                                    <div className="h-3 bg-slate-50 rounded w-1/4"></div>
                                                 </div>
                                             </div>
                                         ))
@@ -130,38 +136,69 @@ export default function DashboardPage() {
                                                 title={item.title}
                                                 time={item.time}
                                                 type={item.type}
+                                                isLast={idx === stats.recent_activity.length - 1}
                                             />
                                         ))
                                     ) : (
-                                        <p className="text-slate-400 italic">No recent activity found.</p>
+                                        <div className="text-center py-10 relative z-10">
+                                            <div className="bg-slate-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3">
+                                                <Clock className="text-slate-300" size={32} />
+                                            </div>
+                                            <p className="text-slate-400 font-medium">No recent activity found.</p>
+                                        </div>
                                     )}
                                 </div>
                             </div>
 
-                            {/* Quick Access */}
-                            <div className="bg-slate-900 rounded-2xl p-6 text-white relative overflow-hidden">
-                                <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500 rounded-full blur-3xl opacity-20 -mr-10 -mt-10"></div>
-                                <h3 className="font-bold text-lg mb-4 relative z-10">Quick Actions</h3>
-                                <div className="space-y-3 relative z-10">
-                                    <Link href="/dashboard/analysis" className="block w-full text-left bg-white/10 hover:bg-white/20 p-3 rounded-xl transition-colors flex items-center justify-between group">
-                                        <span className="font-medium text-sm">Run Code Analysis</span>
-                                        <ArrowUpRight size={16} className="opacity-50 group-hover:opacity-100 transition-opacity" />
-                                    </Link>
-                                    <Link href="/dashboard/collaboration" className="block w-full text-left bg-white/10 hover:bg-white/20 p-3 rounded-xl transition-colors flex items-center justify-between group">
-                                        <span className="font-medium text-sm">Invite Member</span>
-                                        <ArrowUpRight size={16} className="opacity-50 group-hover:opacity-100 transition-opacity" />
-                                    </Link>
-                                    <Link href="/dashboard/analytics" className="block w-full text-left bg-white/10 hover:bg-white/20 p-3 rounded-xl transition-colors flex items-center justify-between group">
-                                        <span className="font-medium text-sm">View Reports</span>
-                                        <ArrowUpRight size={16} className="opacity-50 group-hover:opacity-100 transition-opacity" />
-                                    </Link>
+                            {/* Quick Access Card */}
+                            <div className="bg-[#0f172a] rounded-3xl p-8 text-white relative overflow-hidden flex flex-col justify-between shadow-2xl min-h-[400px]">
+                                {/* Decorative background elements */}
+                                <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500 rounded-full blur-[100px] opacity-20 -mr-20 -mt-20 pointer-events-none"></div>
+                                <div className="absolute bottom-0 left-0 w-48 h-48 bg-purple-500 rounded-full blur-[80px] opacity-10 -ml-10 -mb-10 pointer-events-none"></div>
+
+                                <div className="relative z-10">
+                                    <h3 className="font-bold text-xl mb-6">Quick Actions</h3>
+                                    <div className="space-y-4">
+                                        <Link href="/dashboard/analysis" className="group flex items-center justify-between p-4 bg-white/5 hover:bg-white/10 border border-white/5 hover:border-indigo-500/30 rounded-2xl transition-all duration-300 backdrop-blur-sm">
+                                            <div className="flex items-center gap-3">
+                                                <div className="p-2 bg-indigo-500/20 rounded-lg text-indigo-300 group-hover:text-white transition-colors">
+                                                    <Sparkles size={18} />
+                                                </div>
+                                                <span className="font-medium">Code Analysis</span>
+                                            </div>
+                                            <ArrowUpRight size={18} className="text-slate-500 group-hover:text-white transition-colors" />
+                                        </Link>
+                                        <Link href="/dashboard/collaboration" className="group flex items-center justify-between p-4 bg-white/5 hover:bg-white/10 border border-white/5 hover:border-purple-500/30 rounded-2xl transition-all duration-300 backdrop-blur-sm">
+                                            <div className="flex items-center gap-3">
+                                                <div className="p-2 bg-purple-500/20 rounded-lg text-purple-300 group-hover:text-white transition-colors">
+                                                    <MessageSquare size={18} />
+                                                </div>
+                                                <span className="font-medium">Invite Team</span>
+                                            </div>
+                                            <ArrowUpRight size={18} className="text-slate-500 group-hover:text-white transition-colors" />
+                                        </Link>
+                                        <Link href="/dashboard/analytics" className="group flex items-center justify-between p-4 bg-white/5 hover:bg-white/10 border border-white/5 hover:border-emerald-500/30 rounded-2xl transition-all duration-300 backdrop-blur-sm">
+                                            <div className="flex items-center gap-3">
+                                                <div className="p-2 bg-emerald-500/20 rounded-lg text-emerald-300 group-hover:text-white transition-colors">
+                                                    <BarChart size={18} />
+                                                </div>
+                                                <span className="font-medium">View Reports</span>
+                                            </div>
+                                            <ArrowUpRight size={18} className="text-slate-500 group-hover:text-white transition-colors" />
+                                        </Link>
+                                    </div>
                                 </div>
 
-                                <div className="mt-8 pt-6 border-t border-white/10">
-                                    <p className="text-xs text-slate-400 font-medium uppercase tracking-wider mb-2">System Status</p>
-                                    <div className="flex items-center gap-2 text-sm text-green-400 font-bold">
-                                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                                        All Services Operational
+                                <div className="mt-8 pt-6 border-t border-white/10 relative z-10">
+                                    <div className="flex items-center justify-between mb-2">
+                                        <p className="text-xs text-slate-400 font-medium uppercase tracking-wider">System Status</p>
+                                        <span className="flex h-2 w-2 relative">
+                                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                                            <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                                        </span>
+                                    </div>
+                                    <div className="text-sm font-bold bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-emerald-500">
+                                        All Systems Operational
                                     </div>
                                 </div>
                             </div>
@@ -173,42 +210,21 @@ export default function DashboardPage() {
     );
 }
 
-function StatCard({ title, value, trend, icon, trendUp, isLoading }: any) {
-    return (
-        <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
-            <div className="flex justify-between items-start mb-4">
-                <div className="p-3 bg-slate-50 rounded-xl">{icon}</div>
-                {isLoading ? (
-                    <div className="h-6 w-16 bg-slate-100 rounded-full animate-pulse"></div>
-                ) : (
-                    <span className={`text-xs font-bold px-2 py-1 rounded-full ${trendUp ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
-                        {trend}
-                    </span>
-                )}
-            </div>
-            <h3 className="text-slate-500 text-sm font-medium mb-1">{title}</h3>
-            {isLoading ? (
-                <div className="h-8 w-12 bg-slate-200 rounded animate-pulse mt-1"></div>
-            ) : (
-                <p className="text-3xl font-bold text-slate-900">{value}</p>
-            )}
-        </div>
-    )
-}
-
-function ActivityItem({ title, time, type }: any) {
+function ActivityItem({ title, time, type, isLast }: any) {
     const getDotColor = () => {
-        if (type === 'success') return 'bg-green-500';
-        if (type === 'warning') return 'bg-orange-500';
-        return 'bg-blue-500';
+        if (type === 'success') return 'bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.4)]';
+        if (type === 'warning') return 'bg-amber-500 shadow-[0_0_10px_rgba(245,158,11,0.4)]';
+        return 'bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.4)]';
     }
 
     return (
-        <div className="flex items-start gap-4">
-            <div className={`mt-2 w-2 h-2 rounded-full ${getDotColor()} ring-4 ring-slate-50`}></div>
-            <div>
+        <div className={`relative flex items-start gap-4 mb-8 ${isLast ? 'mb-0' : ''}`}>
+            {/* Timeline Dot */}
+            <div className={`absolute left-0 mt-1.5 w-3 h-3 rounded-full ${getDotColor()} ring-4 ring-white z-10`} />
+
+            <div className="pl-8">
                 <p className="font-semibold text-slate-800 text-sm">{title}</p>
-                <p className="text-xs text-slate-400">{time}</p>
+                <p className="text-xs text-slate-400 font-medium mt-0.5">{time}</p>
             </div>
         </div>
     )
