@@ -1,6 +1,7 @@
 'use client';
 
 import Sidebar from '@/components/dashboard/Sidebar';
+import NotificationBell from '@/components/dashboard/NotificationBell';
 import Link from 'next/link';
 import { Activity, Plus, Users, Zap, ArrowUpRight, Clock, Loader2, AlertCircle } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -47,9 +48,12 @@ export default function DashboardPage() {
                         <h1 className="text-3xl font-bold text-slate-900 mb-2">Dashboard Overview</h1>
                         <p className="text-slate-500">Welcome back! Here's what's happening today.</p>
                     </div>
-                    <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-bold flex items-center gap-2 shadow-sm transition-all">
-                        <Plus size={18} /> New Project
-                    </button>
+                    <div className="flex items-center gap-4">
+                        <NotificationBell />
+                        <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-bold flex items-center gap-2 shadow-sm transition-all">
+                            <Plus size={18} /> New Project
+                        </button>
+                    </div>
                 </header>
 
                 {loading ? (

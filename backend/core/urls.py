@@ -24,4 +24,5 @@ urlpatterns = [
     path('api/ai/', include('ai_engine.urls')),
     path('api/auth/', include('users.urls')),
     path('api/billing/', include('billing.urls')),
+    path('api/notifications/', include('notifications.urls')),
 ]

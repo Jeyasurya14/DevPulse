@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, Code2, CreditCard, Settings, LogOut, BarChart2, Zap, Home, Sparkles, Target, MessageSquare, Globe, BookOpen } from 'lucide-react';
+import { LayoutDashboard, Code2, CreditCard, Settings, LogOut, BarChart2, Zap, Home, Sparkles, Target, MessageSquare, Globe, BookOpen, Shield } from 'lucide-react';
 import UsageCard from './UsageCard';
 import RecommendationWidget from './RecommendationWidget';
 
@@ -40,6 +40,11 @@ const Sidebar = () => {
                     <BookOpen size={20} className="group-hover:text-blue-400 transition-colors" />
                     <span>Resources</span>
                 </Link>
+                {/* Admin Link (Access controlled by page) */}
+                <Link href="/dashboard/admin" className="flex items-center space-x-3 p-3 rounded-lg hover:bg-purple-600/20 hover:text-purple-400 text-slate-400 transition-all font-medium group">
+                    <Shield size={20} className="group-hover:text-purple-400 transition-colors" />
+                    <span>Admin Panel</span>
+                </Link>
             </nav>
 
             <div className="p-4 border-t border-slate-800 space-y-4">
@@ -50,7 +55,7 @@ const Sidebar = () => {
                     <LogOut size={20} />
                     <span>Log Out</span>
                 </button>
-                <Link href="/settings" className="flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-600/20 hover:text-blue-400 text-slate-400 transition-all font-medium mt-2">
+                <Link href="/dashboard/settings" className="flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-600/20 hover:text-blue-400 text-slate-400 transition-all font-medium mt-2">
                     <Settings size={20} />
                     <span>Settings</span>
                 </Link>
