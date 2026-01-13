@@ -13,28 +13,35 @@ export default function DashboardLayout({
 
     return (
         <div className="flex h-screen bg-slate-50 relative">
-            {/* Mobile Sidebar Toggle */}
-            <button
-                className="md:hidden absolute top-4 left-4 z-50 p-2 bg-slate-900 text-white rounded-lg shadow-lg"
-                onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            >
-                {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
-
             {/* Sidebar with Responsive Props */}
             <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
 
             {/* Overlay for mobile when sidebar is open */}
             {isSidebarOpen && (
                 <div
-                    className="fixed inset-0 bg-black/50 z-10 md:hidden"
+                    className="fixed inset-0 bg-black/50 z-30 md:hidden"
                     onClick={() => setIsSidebarOpen(false)}
                 />
             )}
 
             {/* Main Content Area */}
-            <div className="flex-1 w-full md:w-auto h-full overflow-hidden">
-                {children}
+            <div className="flex-1 flex flex-col w-full h-full overflow-hidden">
+                {/* Mobile Header */}
+                <header className="md:hidden bg-white border-b border-slate-200 p-4 flex items-center justify-between shrink-0 z-20">
+                    <button
+                        className="p-2 -ml-2 text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
+                        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                    >
+                        {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
+                    </button>
+                    <span className="font-bold text-lg text-slate-800">Learnmade</span>
+                    <div className="w-8"></div> {/* Spacer for balance */}
+                </header>
+
+                {/* Page Content */}
+                <div className="flex-1 overflow-hidden relative">
+                    {children}
+                </div>
             </div>
         </div>
     );

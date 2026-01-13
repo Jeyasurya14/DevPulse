@@ -1,5 +1,5 @@
 
-import random
+
 
 def get_recommendations(user):
     """
@@ -28,18 +28,6 @@ def get_recommendations(user):
         'icon': 'Github'
     })
 
-    # Rule 3: Random "AI" Tip
-    tips = [
-        "Optimize your Dockerfile to reduce build times.",
-        "Use caching in your CI/CD pipeline.",
-        "Review your latest security scan results."
-    ]
-    recommendations.append({
-        'id': 'ai_tip',
-        'title': 'Optimization Tip',
-        'description': random.choice(tips),
-        'action': '/dashboard/analysis',
-        'icon': 'Lightbulb'
-    })
+
 
     return recommendations

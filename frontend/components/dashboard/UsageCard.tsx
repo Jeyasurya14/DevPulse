@@ -10,7 +10,7 @@ export default function UsageCard() {
     const [usage, setUsage] = useState<any>(null);
 
     useEffect(() => {
-        fetchAPI('/api/billing/usage/?username=johndoe')
+        fetchAPI('/api/billing/usage/')
             .then(data => setUsage(data))
             .catch(err => console.error(err));
     }, []);

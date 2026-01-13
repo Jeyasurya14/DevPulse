@@ -17,13 +17,7 @@ interface Result {
 }
 
 export default function AnalysisPage() {
-    const [code, setCode] = useState<string>(`def calculate_total(items):
-    total = 0
-    # TODO: Implement tax calculation
-    for item in items:
-        print(f"Processing {item}")
-        total += item.price
-    return total`);
+    const [code, setCode] = useState<string>('# Paste your python code here to analyze\n');
     const [loading, setLoading] = useState(false);
     const [result, setResult] = useState<Result | null>(null);
 

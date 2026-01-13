@@ -4,6 +4,7 @@
 import { Zap, Github, Lightbulb, ArrowRight } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { fetchAPI } from '@/lib/api';
 
 interface Recommendation {
     id: string;
@@ -16,22 +17,14 @@ interface Recommendation {
 export default function RecommendationWidget() {
     // In a real app, fetch from /api/ai/recommendations/
     // Using mock data for immediate UI feedback.
-    const [recommendations, setRecommendations] = useState<Recommendation[]>([
-        {
-            id: 'upgrade_pro',
-            title: 'Unlock Pro Features',
-            description: 'You are hitting usage limits. Upgrade to Pro for unlimited access.',
-            action: '/pricing',
-            icon: 'Zap'
-        },
-        {
-            id: 'connect_github',
-            title: 'Connect GitHub',
-            description: 'Link your repository for automatic code reviews on push.',
-            action: '/dashboard/settings',
-            icon: 'Github'
-        }
-    ]);
+    const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
+
+    // Import fetchAPI (I need to add the import at top too, but replace_file_content handles contiguous blocks. I'll check imports separately or do multi-replace)
+    // Actually, I should check if fetchAPI is imported. It is NOT imported in the current file view (Step 1709).
+    // So I need to add import too.
+
+    useEffect(() => {
+    }, [])
 
     const getIcon = (name: string) => {
         switch (name) {

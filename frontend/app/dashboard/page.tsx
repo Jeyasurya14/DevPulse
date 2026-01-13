@@ -46,7 +46,7 @@ export default function DashboardPage() {
 
     return (
         <div className="h-full bg-slate-50 text-slate-900 font-sans">
-            <main className="flex-1 p-8 overflow-y-auto h-full">
+            <main className="flex-1 p-4 md:p-8 overflow-y-auto h-full">
                 <header className="flex justify-between items-center mb-8">
                     <div>
                         <h1 className="text-3xl font-bold text-slate-900 mb-2">Dashboard Overview</h1>

@@ -2,6 +2,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 from django.conf import settings
 import razorpay
 from core.mongo import get_db_handle
@@ -64,9 +65,10 @@ class VerifyPaymentView(APIView):
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class UsageStatsView(APIView):
+    permission_classes = [IsAuthenticated]
+
     def get(self, request):
-        # In a real app, use request.user.username
-        username = request.query_params.get('username', 'johndoe')
+        username = request.user.username
         db = get_db_handle()
         
         # Get Plan

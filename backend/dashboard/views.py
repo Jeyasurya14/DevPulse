@@ -68,23 +68,21 @@ class StatsView(APIView):
         total_goals = db.goals.count_documents({}) # Proxy for "Projects" for now
         total_notes = db.collaboration_notes.count_documents({})
         
-        # Calculate Mock Velocity based on completed goals
+        # Calculate Velocity based on completed goals
         completed_goals = db.goals.count_documents({"status": "completed"})
-        velocity = completed_goals * 10 + 42 # Base baseline
+        velocity = completed_goals * 10
         
         # Mock Active Members (Future: Count distinct authors in notes)
         active_members = len(db.collaboration_notes.distinct("author")) or 1
         
         stats = {
             "projects": total_goals,
-            "scans": 124, # Mock value for demo
-            "issues": 12, # Mock value
-            "apiUsage": 68, # Mock value percentage
+            "scans": 0, # Placeholder for future Scans collection
+            "issues": 0, # Placeholder for future Issues collection
+            "apiUsage": 0, # Placeholder for future API Usage tracking
             "team_velocity": f"{velocity} pts",
             "active_members": active_members,
-            "recent_activity": [
-                {"title": "System initialized", "time": "Just now", "type": "info"}
-            ] 
+            "recent_activity": [] 
         }
         
         # If we have real notes, use them as activity
