@@ -2,21 +2,37 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 from core.mongo import get_db_handle
 from bson import ObjectId
 import datetime
 
 class GoalList(APIView):
+    permission_classes = [IsAuthenticated]
+
     def get(self, request):
         db = get_db_handle()
-        goals = list(db.goals.find({}, {'_id': 0})) # In prod, convert ObjectId dynamically
+        username = request.user.username
+        # Filter by username
+        goals = list(db.goals.find({"username": username}, {'_id': 0}))
         return Response(goals)
 
     def post(self, request):
         db = get_db_handle()
+        username = request.user.username
         data = request.data
+        
+        title = data.get('title')
+        if not title:
+            return Response({"error": "Title is required"}, status=status.HTTP_400_BAD_REQUEST)
+            
+        # Check for duplicates
+        if db.goals.find_one({"username": username, "title": title}):
+             return Response({"error": "Project with this name already exists"}, status=status.HTTP_400_BAD_REQUEST)
+
         goal = {
-            "title": data.get('title'),
+            "username": username,
+            "title": title,
             "target_date": data.get('target_date'),
             "metric": data.get('metric', 'Tasks Completed'),
             "target_value": int(data.get('target_value', 10)),

@@ -4,8 +4,12 @@ import Sidebar from '@/components/dashboard/Sidebar';
 import NotificationBell from '@/components/dashboard/NotificationBell';
 import Link from 'next/link';
 import { Activity, Plus, Users, Zap, ArrowUpRight, Clock, Loader2, AlertCircle, LayoutDashboard, Code2, CreditCard } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import useSWR from 'swr';
+import { useState } from 'react';
 import { fetchAPI } from '@/lib/api';
+
+// SWR Fetcher
+const fetcher = (url: string) => fetchAPI(url);
 
 interface DashboardStats {
     projects: number;
@@ -21,31 +25,22 @@ interface DashboardStats {
     }[];
 }
 
+import CreateProjectModal from '@/components/dashboard/CreateProjectModal';
+
 export default function DashboardPage() {
-    const [stats, setStats] = useState<DashboardStats | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState('');
+    // Zero Lag: SWR handles caching and revalidation
+    const { data: stats, error, isLoading } = useSWR<DashboardStats>('/api/dashboard/stats/', fetcher, {
+        refreshInterval: 30000, // Background poll every 30s
+        revalidateOnFocus: false, // Don't aggressive revalidate on window focus
+        keepPreviousData: true // Show verified old data while fetching new
+    });
 
-    useEffect(() => {
-        const loadStats = async () => {
-            try {
-                const data = await fetchAPI('/api/dashboard/stats/');
-                setStats(data);
-            } catch (err) {
-                console.error('Failed to load dashboard stats:', err);
-                setError('Failed to load dashboard data. Please try again.');
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        loadStats();
-    }, []);
+    const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
 
     // ... imports
 
     return (
-        <div className="h-full bg-slate-50 text-slate-900 font-sans">
+        <div className="h-full bg-slate-50 text-slate-900 font-sans relative">
             <main className="flex-1 p-4 md:p-8 overflow-y-auto h-full">
                 <header className="flex justify-between items-center mb-8">
                     <div>
@@ -54,51 +49,59 @@ export default function DashboardPage() {
                     </div>
                     <div className="flex items-center gap-4">
                         <NotificationBell />
-                        <button className="flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-lg font-medium transition-colors shadow-sm shadow-brand-200">
+                        <button
+                            onClick={() => setIsProjectModalOpen(true)}
+                            className="flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-lg font-medium transition-colors shadow-sm shadow-brand-200"
+                        >
                             <Plus size={20} /> New Project
                         </button>
                     </div>
                 </header>
 
-                {loading ? (
-                    <div className="flex items-center justify-center h-64">
-                        <Loader2 className="animate-spin text-blue-600" size={48} />
-                    </div>
-                ) : error ? (
+                <CreateProjectModal
+                    isOpen={isProjectModalOpen}
+                    onClose={() => setIsProjectModalOpen(false)}
+                />
+
+                {error ? (
                     <div className="p-6 bg-red-50 text-red-700 rounded-xl border border-red-100 flex items-center gap-3">
-                        <AlertCircle /> {error}
+                        <AlertCircle /> Failed to load dashboard data. Please try again.
                     </div>
                 ) : (
                     <>
-                        {/* Stats Grid */}
+                        {/* Stats Grid - Skeleton or Data */}
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                             <StatCard
                                 title="Total Projects"
-                                value={stats?.projects || 0}
+                                value={stats?.projects ?? 0}
                                 change="+12% from last month"
                                 icon={<LayoutDashboard size={24} className="text-brand-600" />}
                                 trend="up"
+                                isLoading={isLoading && !stats}
                             />
                             <StatCard
                                 title="Code Analysis Scans"
-                                value={stats?.scans || 0}
+                                value={stats?.scans ?? 0}
                                 change="+5% from last month"
                                 icon={<Code2 size={24} className="text-purple-600" />}
                                 trend="up"
+                                isLoading={isLoading && !stats}
                             />
                             <StatCard
                                 title="Issues Fixed"
-                                value={stats?.issues || 0}
+                                value={stats?.issues ?? 0}
                                 change="+18% from last month"
                                 icon={<Zap size={24} className="text-amber-500" />}
                                 trend="up"
+                                isLoading={isLoading && !stats}
                             />
                             <StatCard
                                 title="API Usage"
-                                value={`${stats?.apiUsage || 0}%`}
+                                value={`${stats?.apiUsage ?? 0}%`}
                                 change="Within limits"
                                 icon={<CreditCard size={24} className="text-emerald-500" />}
                                 trend="neutral"
+                                isLoading={isLoading && !stats}
                             />
                         </div>
 
@@ -110,7 +113,17 @@ export default function DashboardPage() {
                                     <Clock size={20} className="text-slate-400" /> Recent Activity
                                 </h3>
                                 <div className="space-y-6">
-                                    {stats?.recent_activity && stats.recent_activity.length > 0 ? (
+                                    {isLoading && !stats ? (
+                                        [1, 2, 3].map(i => (
+                                            <div key={i} className="flex gap-4 animate-pulse">
+                                                <div className="w-2 h-2 rounded-full bg-slate-200 mt-2"></div>
+                                                <div className="space-y-2 flex-1">
+                                                    <div className="h-4 bg-slate-200 rounded w-1/3"></div>
+                                                    <div className="h-3 bg-slate-100 rounded w-1/4"></div>
+                                                </div>
+                                            </div>
+                                        ))
+                                    ) : stats?.recent_activity && stats.recent_activity.length > 0 ? (
                                         stats.recent_activity.map((item, idx) => (
                                             <ActivityItem
                                                 key={idx}
@@ -160,17 +173,25 @@ export default function DashboardPage() {
     );
 }
 
-function StatCard({ title, value, trend, icon, trendUp }: any) {
+function StatCard({ title, value, trend, icon, trendUp, isLoading }: any) {
     return (
         <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
             <div className="flex justify-between items-start mb-4">
                 <div className="p-3 bg-slate-50 rounded-xl">{icon}</div>
-                <span className={`text-xs font-bold px-2 py-1 rounded-full ${trendUp ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
-                    {trend}
-                </span>
+                {isLoading ? (
+                    <div className="h-6 w-16 bg-slate-100 rounded-full animate-pulse"></div>
+                ) : (
+                    <span className={`text-xs font-bold px-2 py-1 rounded-full ${trendUp ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
+                        {trend}
+                    </span>
+                )}
             </div>
             <h3 className="text-slate-500 text-sm font-medium mb-1">{title}</h3>
-            <p className="text-3xl font-bold text-slate-900">{value}</p>
+            {isLoading ? (
+                <div className="h-8 w-12 bg-slate-200 rounded animate-pulse mt-1"></div>
+            ) : (
+                <p className="text-3xl font-bold text-slate-900">{value}</p>
+            )}
         </div>
     )
 }
