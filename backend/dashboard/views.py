@@ -76,7 +76,10 @@ class StatsView(APIView):
         active_members = len(db.collaboration_notes.distinct("author")) or 1
         
         stats = {
-            "total_projects": total_goals,
+            "projects": total_goals,
+            "scans": 124, # Mock value for demo
+            "issues": 12, # Mock value
+            "apiUsage": 68, # Mock value percentage
             "team_velocity": f"{velocity} pts",
             "active_members": active_members,
             "recent_activity": [

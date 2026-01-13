@@ -2,7 +2,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Sidebar from '@/components/dashboard/Sidebar';
 import { Target, Plus, TrendingUp, Calendar } from 'lucide-react';
 import { fetchAPI } from '@/lib/api';
 
@@ -65,9 +64,8 @@ export default function GoalsPage() {
     }
 
     return (
-        <div className="flex h-screen bg-gray-950 text-white font-sans">
-            <Sidebar />
-            <main className="flex-1 p-8 overflow-y-auto">
+        <div className="bg-gray-950 text-white font-sans h-full">
+            <main className="p-8 h-full overflow-y-auto">
                 <header className="flex justify-between items-center mb-8">
                     <div>
                         <h1 className="text-3xl font-bold mb-2">Goal Tracking</h1>

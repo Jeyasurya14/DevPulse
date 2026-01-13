@@ -1,8 +1,6 @@
-
 'use client';
 
 import React, { useState } from 'react';
-import Sidebar from '@/components/dashboard/Sidebar';
 import { Play, Sparkles, AlertTriangle, CheckCircle, XCircle, Info, ShieldCheck } from 'lucide-react';
 import { fetchAPI } from '@/lib/api';
 
@@ -60,9 +58,8 @@ export default function AnalysisPage() {
     };
 
     return (
-        <div className="flex h-screen bg-slate-50 text-slate-900 font-sans">
-            <Sidebar />
-            <main className="flex-1 p-8 overflow-hidden flex flex-col">
+        <div className="bg-slate-50 text-slate-900 font-sans h-full">
+            <main className="p-8 h-full overflow-y-auto">
                 <header className="flex justify-between items-center mb-8">
                     <div>
                         <h1 className="text-3xl font-bold mb-2 flex items-center gap-3 text-slate-900">

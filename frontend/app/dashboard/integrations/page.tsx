@@ -2,7 +2,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Sidebar from '@/components/dashboard/Sidebar';
 import { Github, Slack, Trello, CheckCircle, XCircle, Loader2 } from 'lucide-react';
 import { fetchAPI } from '@/lib/api';
 
@@ -67,9 +66,8 @@ export default function IntegrationsPage() {
     };
 
     return (
-        <div className="flex h-screen bg-gray-950 text-white font-sans">
-            <Sidebar />
-            <main className="flex-1 p-8 overflow-y-auto">
+        <div className="bg-gray-950 text-white font-sans h-full">
+            <main className="p-8 h-full overflow-y-auto">
                 <header className="mb-8">
                     <h1 className="text-3xl font-bold mb-2">Integration Hub</h1>
                     <p className="text-gray-400">Connect your favorite tools to centralize your workflow.</p>
@@ -109,8 +107,8 @@ export default function IntegrationsPage() {
                                     onClick={() => !integration.connected && handleConnect(integration.name || integration.provider || '')}
                                     disabled={integration.connected || connecting === (integration.name || integration.provider)}
                                     className={`w-full py-2 px-4 rounded-lg font-medium transition-colors flex items-center justify-center ${integration.connected
-                                            ? 'bg-gray-800 text-gray-500 cursor-default'
-                                            : 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-600/20'
+                                        ? 'bg-gray-800 text-gray-500 cursor-default'
+                                        : 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-600/20'
                                         }`}
                                 >
                                     {connecting === (integration.name || integration.provider) ? (

@@ -1,13 +1,11 @@
 
-import Sidebar from '@/components/dashboard/Sidebar';
 import { Lock, BookOpen, Crown, FileText, Video } from 'lucide-react';
 import Link from 'next/link';
 
 export default function ResourcesPage() {
     return (
-        <div className="flex h-screen bg-slate-50 text-slate-900 font-sans">
-            <Sidebar />
-            <main className="flex-1 p-8 overflow-y-auto">
+        <div className="bg-slate-50 text-slate-900 font-sans h-full">
+            <main className="p-8 h-full overflow-y-auto">
                 <header className="mb-8">
                     <h1 className="text-3xl font-bold text-slate-900">Exclusive Resources</h1>
                     <p className="text-slate-500">Premium guides, tutorials, and tools to help you scale.</p>

@@ -78,9 +78,8 @@ export default function AdminPage() {
     if (!isAdmin) return null; // Logic prevents render, showing nothing while redirecting
 
     return (
-        <div className="flex h-screen bg-slate-50 text-slate-900 font-sans">
-            <Sidebar />
-            <main className="flex-1 p-8 overflow-y-auto">
+        <div className="bg-slate-50 text-slate-900 font-sans h-full">
+            <main className="flex-1 p-8 overflow-y-auto h-full">
                 <header className="mb-8">
                     <div className="flex items-center gap-2 mb-2">
                         <span className="bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide flex items-center gap-1">

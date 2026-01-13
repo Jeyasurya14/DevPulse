@@ -4,9 +4,8 @@ import { UserPlus, Users, Mail, Check, X } from 'lucide-react';
 
 export default function CollaborationPage() {
     return (
-        <div className="flex h-screen bg-slate-50 text-slate-900 font-sans">
-            <Sidebar />
-            <main className="flex-1 p-8 overflow-y-auto">
+        <div className="bg-slate-50 text-slate-900 font-sans h-full">
+            <main className="p-8 h-full overflow-y-auto">
                 <header className="mb-8 flex justify-between items-center">
                     <div>
                         <h1 className="text-3xl font-bold text-slate-900">Collaboration</h1>

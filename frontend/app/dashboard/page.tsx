@@ -3,14 +3,17 @@
 import Sidebar from '@/components/dashboard/Sidebar';
 import NotificationBell from '@/components/dashboard/NotificationBell';
 import Link from 'next/link';
-import { Activity, Plus, Users, Zap, ArrowUpRight, Clock, Loader2, AlertCircle } from 'lucide-react';
+import { Activity, Plus, Users, Zap, ArrowUpRight, Clock, Loader2, AlertCircle, LayoutDashboard, Code2, CreditCard } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { fetchAPI } from '@/lib/api';
 
 interface DashboardStats {
-    total_projects: number;
-    team_velocity: string;
-    active_members: number;
+    projects: number;
+    scans: number;
+    issues: number;
+    apiUsage: number;
+    team_velocity?: string;
+    active_members?: number;
     recent_activity: {
         title: string;
         time: string;
@@ -39,10 +42,11 @@ export default function DashboardPage() {
         loadStats();
     }, []);
 
+    // ... imports
+
     return (
-        <div className="flex h-screen bg-slate-50 text-slate-900 font-sans">
-            <Sidebar />
-            <main className="flex-1 p-8 overflow-y-auto">
+        <div className="h-full bg-slate-50 text-slate-900 font-sans">
+            <main className="flex-1 p-8 overflow-y-auto h-full">
                 <header className="flex justify-between items-center mb-8">
                     <div>
                         <h1 className="text-3xl font-bold text-slate-900 mb-2">Dashboard Overview</h1>
@@ -50,8 +54,8 @@ export default function DashboardPage() {
                     </div>
                     <div className="flex items-center gap-4">
                         <NotificationBell />
-                        <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-bold flex items-center gap-2 shadow-sm transition-all">
-                            <Plus size={18} /> New Project
+                        <button className="flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-lg font-medium transition-colors shadow-sm shadow-brand-200">
+                            <Plus size={20} /> New Project
                         </button>
                     </div>
                 </header>
@@ -67,27 +71,34 @@ export default function DashboardPage() {
                 ) : (
                     <>
                         {/* Stats Grid */}
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                             <StatCard
                                 title="Total Projects"
-                                value={stats?.total_projects || 0}
-                                trend="Active"
-                                icon={<Zap className="text-blue-600" size={24} />}
-                                trendUp={true}
+                                value={stats?.projects || 0}
+                                change="+12% from last month"
+                                icon={<LayoutDashboard size={24} className="text-brand-600" />}
+                                trend="up"
                             />
                             <StatCard
-                                title="Team Velocity"
-                                value={stats?.team_velocity || '0 pts'}
-                                trend="Calculated live"
-                                icon={<Activity className="text-purple-600" size={24} />}
-                                trendUp={true}
+                                title="Code Analysis Scans"
+                                value={stats?.scans || 0}
+                                change="+5% from last month"
+                                icon={<Code2 size={24} className="text-purple-600" />}
+                                trend="up"
                             />
                             <StatCard
-                                title="Active Members"
-                                value={stats?.active_members || 1}
-                                trend="Collaborators"
-                                icon={<Users className="text-green-600" size={24} />}
-                                trendUp={true}
+                                title="Issues Fixed"
+                                value={stats?.issues || 0}
+                                change="+18% from last month"
+                                icon={<Zap size={24} className="text-amber-500" />}
+                                trend="up"
+                            />
+                            <StatCard
+                                title="API Usage"
+                                value={`${stats?.apiUsage || 0}%`}
+                                change="Within limits"
+                                icon={<CreditCard size={24} className="text-emerald-500" />}
+                                trend="neutral"
                             />
                         </div>
 

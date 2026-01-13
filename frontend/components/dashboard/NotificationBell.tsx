@@ -80,7 +80,7 @@ export default function NotificationBell() {
             case 'success': return <CheckCircle size={16} className="text-green-500" />;
             case 'warning': return <AlertTriangle size={16} className="text-yellow-500" />;
             case 'error': return <AlertCircle size={16} className="text-red-500" />;
-            default: return <Info size={16} className="text-blue-500" />;
+            default: return <Info size={16} className="text-brand-500" />;
         }
     };
 
@@ -88,7 +88,7 @@ export default function NotificationBell() {
         <div className="relative" ref={dropdownRef}>
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="p-2 bg-white rounded-full text-slate-400 hover:text-blue-600 shadow-sm border border-slate-100 transition-colors relative"
+                className="p-2 bg-white rounded-full text-slate-400 hover:text-brand-600 shadow-sm border border-slate-100 transition-colors relative"
             >
                 <Bell size={20} />
                 {unreadCount > 0 && (
@@ -103,7 +103,7 @@ export default function NotificationBell() {
                         {unreadCount > 0 && (
                             <button
                                 onClick={markAllRead}
-                                className="text-xs text-blue-600 hover:text-blue-800 font-medium"
+                                className="text-xs text-brand-600 hover:text-brand-800 font-medium"
                                 disabled={isLoading}
                             >
                                 Mark all read
@@ -122,7 +122,7 @@ export default function NotificationBell() {
                                 {notifications.map((notification) => (
                                     <div
                                         key={notification.id}
-                                        className={`p-4 hover:bg-slate-50 transition-colors flex gap-3 ${!notification.is_read ? 'bg-blue-50/50' : ''}`}
+                                        className={`p-4 hover:bg-slate-50 transition-colors flex gap-3 ${!notification.is_read ? 'bg-brand-50/50' : ''}`}
                                     >
                                         <div className="mt-1 shrink-0">
                                             {getIcon(notification.notification_type)}
@@ -140,7 +140,7 @@ export default function NotificationBell() {
                                             {notification.action_link && (
                                                 <Link
                                                     href={notification.action_link}
-                                                    className="mt-2 text-xs text-blue-600 font-bold block hover:underline"
+                                                    className="mt-2 text-xs text-brand-600 font-bold block hover:underline"
                                                     onClick={() => setIsOpen(false)}
                                                 >
                                                     View Details
