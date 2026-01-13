@@ -10,8 +10,8 @@ export async function fetchAPI(endpoint: string, options: RequestInit = {}) {
         ...options,
         headers: {
             'Content-Type': 'application/json',
-            ...authHeaders,
-            ...options.headers,
+            ...(authHeaders as Record<string, string>),
+            ...(options.headers as Record<string, string>),
         },
     });
 
