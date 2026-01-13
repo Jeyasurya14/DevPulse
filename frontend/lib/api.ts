@@ -2,10 +2,15 @@
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
 export async function fetchAPI(endpoint: string, options: RequestInit = {}) {
+    // Auth Header
+    const token = typeof window !== 'undefined' ? localStorage.getItem('access_token') : null;
+    const authHeaders = token ? { 'Authorization': `Bearer ${token}` } : {};
+
     const res = await fetch(`${API_BASE_URL}${endpoint}`, {
         ...options,
         headers: {
             'Content-Type': 'application/json',
+            ...authHeaders,
             ...options.headers,
         },
     });

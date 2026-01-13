@@ -23,11 +23,12 @@ const Sidebar = ({ isOpen = true, onClose, isAdmin = false }: SidebarProps) => {
             top-0 left-0 
             h-screen w-64 
             bg-slate-900 text-white 
-            p-4 flex flex-col shadow-xl z-40 
+            p-4 flex flex-col shadow-xl z-50 
             transition-transform duration-300 ease-in-out
-            ${isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
+            ${isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0 ml-0 md:ml-0'}
+            md:flex-shrink-0
         `}>
-                <div className="mb-8 px-2 mt-2 flex justify-between items-center">
+                <div className="mb-8 px-2 mt-2 flex justify-between items-center flex-shrink-0">
                     <Link href="/dashboard" className="flex items-center gap-3">
                         <div className="relative h-10 w-32">
                             <Image

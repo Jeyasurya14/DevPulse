@@ -83,50 +83,51 @@ export default function IntegrationModal({ isOpen, onClose, integration, onUpdat
     };
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-            <div className="bg-slate-900 border border-slate-700 rounded-2xl w-full max-w-md shadow-2xl overflow-hidden flex flex-col text-white">
-                <div className="p-6 border-b border-slate-800 flex justify-between items-center bg-slate-800/50">
+    return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-in fade-in duration-200">
+            <div className="bg-white rounded-2xl w-full max-w-md shadow-2xl overflow-hidden flex flex-col animate-in zoom-in-95 duration-200">
+                <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
                     <div className="flex items-center gap-3">
-                        <div className="p-2 bg-slate-800 rounded-lg text-blue-400">
+                        <div className="p-2 bg-white border border-slate-200 rounded-lg text-blue-600 shadow-sm">
                             {getIcon(integration.provider)}
                         </div>
                         <div>
-                            <h3 className="text-xl font-bold">{integration.name}</h3>
-                            <p className="text-xs text-slate-400">{integration.provider} integration</p>
+                            <h3 className="text-xl font-bold text-slate-900">{integration.name}</h3>
+                            <p className="text-xs text-slate-500 font-medium uppercase tracking-wide">{integration.provider} integration</p>
                         </div>
                     </div>
-                    <button onClick={onClose} className="p-2 hover:bg-slate-800 rounded-full transition-colors">
-                        <X size={20} className="text-slate-400" />
+                    <button onClick={onClose} className="p-2 hover:bg-slate-200 rounded-full transition-colors text-slate-400 hover:text-slate-600">
+                        <X size={20} />
                     </button>
                 </div>
 
                 <div className="p-6 space-y-6">
                     {/* Connection Status */}
                     {integration.connected ? (
-                        <div className="bg-green-500/10 border border-green-500/20 p-4 rounded-lg flex items-center gap-3">
-                            <CheckCircle className="text-green-500" size={20} />
+                        <div className="bg-green-50 border border-green-200 p-4 rounded-xl flex items-center gap-3">
+                            <CheckCircle className="text-green-600" size={20} />
                             <div>
-                                <p className="text-sm font-bold text-green-400">Connected</p>
-                                <p className="text-xs text-slate-400">Last synced: {integration.last_synced ? new Date(integration.last_synced).toLocaleString() : 'Just now'}</p>
+                                <p className="text-sm font-bold text-green-700">Connected</p>
+                                <p className="text-xs text-green-600">Last synced: {integration.last_synced ? new Date(integration.last_synced).toLocaleString() : 'Just now'}</p>
                             </div>
                         </div>
                     ) : (
-                        <div className="bg-blue-500/10 border border-blue-500/20 p-4 rounded-lg flex items-center gap-3">
-                            <AlertCircle className="text-blue-400" size={20} />
+                        <div className="bg-blue-50 border border-blue-100 p-4 rounded-xl flex items-center gap-3">
+                            <AlertCircle className="text-blue-600" size={20} />
                             <div>
-                                <p className="text-sm font-bold text-blue-400">Not Connected</p>
-                                <p className="text-xs text-slate-400">Enter your credentials to enable sync.</p>
+                                <p className="text-sm font-bold text-blue-700">Not Connected</p>
+                                <p className="text-xs text-blue-600">Enter your credentials to enable sync.</p>
                             </div>
                         </div>
                     )}
 
                     {/* Config Fields */}
-                    <div className="space-y-4">
+                    <div className="space-y-5">
                         <div>
-                            <label className="block text-xs font-bold text-slate-400 uppercase mb-1">API Key / Token</label>
+                            <label className="block text-xs font-bold text-slate-700 uppercase mb-1.5">API Key / Token</label>
                             <input
                                 type="password"
-                                className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all placeholder-slate-600"
+                                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all placeholder-slate-400 text-slate-900 font-medium"
                                 placeholder={integration.connected ? "Enter new key to update..." : "Enter your API Key"}
                                 value={apiKey}
                                 onChange={(e) => setApiKey(e.target.value)}
@@ -136,9 +137,9 @@ export default function IntegrationModal({ isOpen, onClose, integration, onUpdat
                         {/* Provider Specific Config */}
                         {integration.provider === 'github' && (
                             <div>
-                                <label className="block text-xs font-bold text-slate-400 uppercase mb-1">Repository</label>
+                                <label className="block text-xs font-bold text-slate-700 uppercase mb-1.5">Repository</label>
                                 <select
-                                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+                                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none text-slate-900 font-medium"
                                     value={config.repo || ''}
                                     onChange={(e) => setConfig({ ...config, repo: e.target.value })}
                                 >
@@ -152,9 +153,9 @@ export default function IntegrationModal({ isOpen, onClose, integration, onUpdat
 
                         {integration.provider === 'slack' && (
                             <div>
-                                <label className="block text-xs font-bold text-slate-400 uppercase mb-1">Notification Channel</label>
+                                <label className="block text-xs font-bold text-slate-700 uppercase mb-1.5">Notification Channel</label>
                                 <select
-                                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+                                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none text-slate-900 font-medium"
                                     value={config.channel || ''}
                                     onChange={(e) => setConfig({ ...config, channel: e.target.value })}
                                 >
@@ -168,10 +169,10 @@ export default function IntegrationModal({ isOpen, onClose, integration, onUpdat
 
                         {integration.provider === 'jira' && (
                             <div>
-                                <label className="block text-xs font-bold text-slate-400 uppercase mb-1">Project Key</label>
+                                <label className="block text-xs font-bold text-slate-700 uppercase mb-1.5">Project Key</label>
                                 <input
                                     type="text"
-                                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all placeholder-slate-600"
+                                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all placeholder-slate-400 text-slate-900 font-medium"
                                     placeholder="e.g. PROJ"
                                     value={config.project_key || ''}
                                     onChange={(e) => setConfig({ ...config, project_key: e.target.value })}
@@ -180,14 +181,18 @@ export default function IntegrationModal({ isOpen, onClose, integration, onUpdat
                         )}
                     </div>
 
-                    {error && <p className="text-red-400 text-sm bg-red-400/10 p-2 rounded border border-red-400/20">{error}</p>}
+                    {error && (
+                        <div className="flex items-center gap-2 text-red-600 text-sm bg-red-50 p-3 rounded-lg border border-red-100">
+                            <AlertCircle size={16} /> {error}
+                        </div>
+                    )}
                 </div>
 
-                <div className="p-6 border-t border-slate-800 bg-slate-800/50 flex justify-between gap-3">
+                <div className="p-6 border-t border-slate-100 bg-slate-50 flex justify-between gap-3">
                     {integration.connected ? (
                         <button
                             onClick={handleDisconnect}
-                            className="bg-red-500/10 text-red-400 px-4 py-2 rounded-lg font-bold hover:bg-red-500/20 transition-colors flex items-center text-sm"
+                            className="bg-red-50 text-red-600 border border-red-200 px-4 py-2 rounded-xl font-bold hover:bg-red-100 transition-colors flex items-center text-sm"
                             disabled={loading}
                         >
                             {loading ? <Loader2 className="animate-spin mr-2" size={16} /> : <Trash2 size={16} className="mr-2" />}
@@ -196,10 +201,15 @@ export default function IntegrationModal({ isOpen, onClose, integration, onUpdat
                     ) : <div></div>}
 
                     <div className="flex gap-3">
-                        <button onClick={onClose} className="px-4 py-2 rounded-lg font-bold text-slate-400 hover:text-white transition-colors text-sm">Cancel</button>
+                        <button
+                            onClick={onClose}
+                            className="px-4 py-2 rounded-xl font-bold text-slate-500 hover:bg-slate-200 transition-colors text-sm"
+                        >
+                            Cancel
+                        </button>
                         <button
                             onClick={handleConnect}
-                            className="bg-blue-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-blue-500 transition-colors shadow-lg shadow-blue-500/20 flex items-center text-sm"
+                            className="bg-blue-600 text-white px-6 py-2 rounded-xl font-bold hover:bg-blue-700 transition-colors shadow-lg shadow-blue-500/20 flex items-center text-sm"
                             disabled={loading}
                         >
                             {loading ? <Loader2 className="animate-spin mr-2" size={16} /> : <Save size={16} className="mr-2" />}
