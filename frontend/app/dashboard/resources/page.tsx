@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from 'react';
 import { Lock, BookOpen, Crown, FileText, Video, X, PlayCircle, CheckCircle } from 'lucide-react';
 import Link from 'next/link';
