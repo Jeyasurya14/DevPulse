@@ -12,9 +12,10 @@ import Image from 'next/image';
 interface SidebarProps {
     isOpen?: boolean;
     onClose?: () => void;
+    isAdmin?: boolean;
 }
 
-const Sidebar = ({ isOpen = true, onClose }: SidebarProps) => {
+const Sidebar = ({ isOpen = true, onClose, isAdmin = false }: SidebarProps) => {
     return (
         <>
             <aside className={`
@@ -94,14 +95,16 @@ const Sidebar = ({ isOpen = true, onClose }: SidebarProps) => {
                         <span>Resources</span>
                     </Link>
                     {/* Admin Link (Access controlled by page) */}
-                    <Link
-                        href="/dashboard/admin"
-                        onClick={onClose}
-                        className="flex items-center space-x-3 p-3 rounded-lg hover:bg-purple-600/20 hover:text-purple-400 text-slate-400 transition-all font-medium group"
-                    >
-                        <Shield size={20} className="group-hover:text-purple-400 transition-colors" />
-                        <span>Admin Panel</span>
-                    </Link>
+                    {isAdmin && (
+                        <Link
+                            href="/dashboard/admin"
+                            onClick={onClose}
+                            className="flex items-center space-x-3 p-3 rounded-lg hover:bg-purple-600/20 hover:text-purple-400 text-slate-400 transition-all font-medium group"
+                        >
+                            <Shield size={20} className="group-hover:text-purple-400 transition-colors" />
+                            <span>Admin Panel</span>
+                        </Link>
+                    )}
                 </nav>
 
                 <div className="p-4 border-t border-slate-800 space-y-4">

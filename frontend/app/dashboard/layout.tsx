@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Sidebar from '@/components/dashboard/Sidebar';
 import { Menu, X } from 'lucide-react';
+import { fetchAPI } from '@/lib/api';
 
 export default function DashboardLayout({
     children,
@@ -10,11 +11,26 @@ export default function DashboardLayout({
     children: React.ReactNode;
 }) {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(false);
+
+    useEffect(() => {
+        const checkAdmin = async () => {
+            try {
+                const profile = await fetchAPI('/api/auth/profile/');
+                if (profile?.is_staff) {
+                    setIsAdmin(true);
+                }
+            } catch (err) {
+                // Ignore, just don't show admin capabilities
+            }
+        };
+        checkAdmin();
+    }, []);
 
     return (
         <div className="flex h-screen bg-slate-50 relative">
             {/* Sidebar with Responsive Props */}
-            <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
+            <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} isAdmin={isAdmin} />
 
             {/* Overlay for mobile when sidebar is open */}
             {isSidebarOpen && (

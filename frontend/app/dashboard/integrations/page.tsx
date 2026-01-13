@@ -43,6 +43,9 @@ export default function IntegrationsPage() {
 
     const handleConnect = async (provider: string) => {
         setConnecting(provider);
+        // Simulate OAuth Redirect Delay
+        await new Promise(resolve => setTimeout(resolve, 1500));
+
         const mockKey = `key-${Math.random().toString(36).substring(7)}`; // Simulate user input
         try {
             await fetchAPI('/api/integrations/connect/', {
@@ -118,6 +121,7 @@ export default function IntegrationsPage() {
                                     ) : (
                                         'Connect'
                                     )}
+                                    {connecting === (integration.name || integration.provider) && <span className="ml-2 text-xs">Redirecting...</span>}
                                 </button>
                             </div>
                         ))}

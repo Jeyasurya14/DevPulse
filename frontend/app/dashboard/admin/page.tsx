@@ -81,11 +81,6 @@ export default function AdminPage() {
         <div className="bg-slate-50 text-slate-900 font-sans h-full">
             <main className="flex-1 p-8 overflow-y-auto h-full">
                 <header className="mb-8">
-                    <div className="flex items-center gap-2 mb-2">
-                        <span className="bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide flex items-center gap-1">
-                            <Shield size={12} /> Admin Area
-                        </span>
-                    </div>
                     <h1 className="text-3xl font-bold text-slate-900">User Administration</h1>
                     <p className="text-slate-500">Manage registered users and system access.</p>
                 </header>
@@ -104,8 +99,8 @@ export default function AdminPage() {
                                     <th className="p-4 font-semibold border-b border-slate-200">ID</th>
                                     <th className="p-4 font-semibold border-b border-slate-200">User</th>
                                     <th className="p-4 font-semibold border-b border-slate-200">Status</th>
-                                    <th className="p-4 font-semibold border-b border-slate-200">Joined</th>
-                                    <th className="p-4 font-semibold border-b border-slate-200">Last Login</th>
+                                    <th className="p-4 font-semibold border-b border-slate-200 hidden md:table-cell">Joined</th>
+                                    <th className="p-4 font-semibold border-b border-slate-200 hidden md:table-cell">Last Login</th>
                                     <th className="p-4 font-semibold border-b border-slate-200 text-right">Actions</th>
                                 </tr>
                             </thead>
@@ -129,8 +124,8 @@ export default function AdminPage() {
                                                 </span>
                                             </div>
                                         </td>
-                                        <td className="p-4 text-sm text-slate-600">{user.date_joined}</td>
-                                        <td className="p-4 text-sm text-slate-600">{user.last_login || 'Never'}</td>
+                                        <td className="p-4 text-sm text-slate-600 hidden md:table-cell">{user.date_joined}</td>
+                                        <td className="p-4 text-sm text-slate-600 hidden md:table-cell">{user.last_login || 'Never'}</td>
                                         <td className="p-4 text-right">
                                             {!user.is_staff ? (
                                                 <button
