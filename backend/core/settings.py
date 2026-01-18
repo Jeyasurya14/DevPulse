@@ -35,22 +35,25 @@ ALLOWED_HOSTS = [host for host in ALLOWED_HOSTS if host]
 # Application definition
 # ...
 
-# CORS Config
-CORS_ALLOW_ALL_ORIGINS = False
-CORS_ALLOWED_ORIGINS = [
-    "https://devpulse.learn-made.in",
-    "https://www.devpulse.learn-made.in",
+# CORS & CSRF Configuration
+CORS_ALLOW_ALL_ORIGINS = os.getenv('CORS_ALLOW_ALL_ORIGINS', 'False') == 'True'
+
+# Default allowed origins (Development & Production)
+default_origins = [
     "http://localhost:3000",
-]
-CSRF_TRUSTED_ORIGINS = [
+    "http://127.0.0.1:3000",
     "https://devpulse.learn-made.in",
     "https://www.devpulse.learn-made.in",
-    "https://*.onrender.com",
     "https://devpulse-backend.learn-made.in",
 ]
 
+# Add origins from environment variable
+env_origins = [origin.strip("/") for origin in os.getenv('CORS_ALLOWED_ORIGINS', '').split(',')] if os.getenv('CORS_ALLOWED_ORIGINS') else []
+CORS_ALLOWED_ORIGINS = list(set(default_origins + env_origins))
 
-# Application definition
+CSRF_TRUSTED_ORIGINS = CORS_ALLOWED_ORIGINS + ["https://*.onrender.com"]
+
+CORS_ALLOW_CREDENTIALS = True
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -178,12 +181,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 if not DEBUG:
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# CORS Config
-# CORS Config
-CORS_ALLOW_ALL_ORIGINS = os.getenv('CORS_ALLOW_ALL_ORIGINS', 'False') == 'True'
-CORS_ALLOWED_ORIGINS = [origin.strip("/") for origin in os.getenv('CORS_ALLOWED_ORIGINS', '').split(',')] if os.getenv('CORS_ALLOWED_ORIGINS') else []
-CSRF_TRUSTED_ORIGINS = [origin.strip("/") for origin in os.getenv('CSRF_TRUSTED_ORIGINS', '').split(',')] if os.getenv('CSRF_TRUSTED_ORIGINS') else []
-CORS_ALLOW_CREDENTIALS = True
+# CORS Config - Consolidated above
 
 # Razorpay
 import os

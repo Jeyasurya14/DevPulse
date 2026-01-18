@@ -124,7 +124,7 @@ export default function IntegrationsPage() {
                         </div>
                         <h3 className="text-xl font-bold text-neutral-900 mb-2">Service Unavailable</h3>
                         <p className="text-neutral-500 max-w-md mb-6">
-                            We couldn&apos;t retrieve your integrations. This might be due to a network interruption.
+                            {error?.message || "We couldn't retrieve your integrations. This might be due to a network interruption."}
                         </p>
                         <Button variant="primary" onClick={() => mutate()}>
                             Retry Connection
