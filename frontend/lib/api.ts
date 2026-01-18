@@ -1,4 +1,4 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://devpulse-backend.learn-made.in';
 
 export async function fetchAPI(endpoint: string, options: RequestInit = {}) {
     // Auth Header

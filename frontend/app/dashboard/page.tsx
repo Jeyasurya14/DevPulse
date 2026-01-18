@@ -62,17 +62,8 @@ export default function DashboardPage() {
         { value: 'custom', label: 'Custom range' },
     ];
 
-    if (error) {
-        return (
-            <div className="h-full p-8 flex flex-col items-center justify-center text-center">
-                <div className="bg-error-50 p-4 rounded-full mb-4">
-                    <AlertCircle className="text-error-500" size={40} />
-                </div>
-                <h3 className="text-xl font-bold text-neutral-900 mb-2">Unable to Load Dashboard</h3>
-                <Button variant="primary" onClick={() => window.location.reload()}>Retry Connection</Button>
-            </div>
-        )
-    }
+    // If error occurs, we just show empty state/0s instead of blocking the UI
+    const isLoadingData = isLoading && !stats && !error;
 
     return (
         <div className="h-full bg-neutral-50/50 text-neutral-900 font-sans relative">
@@ -84,9 +75,9 @@ export default function DashboardPage() {
                         <p className="text-xs text-neutral-500">Updated just now</p>
                     </div>
                     <div className="flex items-center gap-4">
-                        <div className="hidden sm:flex text-xs font-medium px-3 py-1.5 bg-success-50 text-success-700 rounded-full items-center gap-1.5">
-                            <span className="w-1.5 h-1.5 rounded-full bg-success-500 animate-pulse" />
-                            System Healthy
+                        <div className={`hidden sm:flex text-xs font-medium px-3 py-1.5 rounded-full items-center gap-1.5 ${error ? 'bg-error-50 text-error-700' : 'bg-success-50 text-success-700'}`}>
+                            <span className={`w-1.5 h-1.5 rounded-full ${error ? 'bg-error-500' : 'bg-success-500 animate-pulse'}`} />
+                            {error ? 'System Offline' : 'System Healthy'}
                         </div>
                         <div className="flex items-center gap-3">
                             {/* Date Range Selector */}
