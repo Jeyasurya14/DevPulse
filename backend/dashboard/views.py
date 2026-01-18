@@ -154,17 +154,94 @@ class TeamMemberList(APIView):
         
         return Response(member, status=status.HTTP_201_CREATED)
 
+# Catalog of supported integrations
+INTEGRATION_CATALOG = [
+    {"name": "GitHub", "provider": "github", "description": "Sync code repositories and track PRs."},
+    {"name": "Slack", "provider": "slack", "description": "Get real-time alerts and notifications."},
+    {"name": "Jira", "provider": "jira", "description": "Track issues and project progress."},
+    {"name": "GitLab", "provider": "gitlab", "description": "CI/CD pipelines and source control."},
+    {"name": "Trello", "provider": "trello", "description": "Kanban boards for task management."},
+]
+
 class IntegrationList(APIView):
+    permission_classes = [IsAuthenticated]
+
     def get(self, request):
-        # Seeded Integrations Data
-        integrations = [
-            {"name": "GitHub", "provider": "github", "description": "Sync code repositories and track PRs.", "connected": True, "last_synced": "Just now"},
-            {"name": "Slack", "provider": "slack", "description": "Get real-time alerts and notifications.", "connected": False},
-            {"name": "Jira", "provider": "jira", "description": "Track issues and project progress.", "connected": False},
-            {"name": "GitLab", "provider": "gitlab", "description": "CI/CD pipelines and source control.", "connected": False},
-            {"name": "Trello", "provider": "trello", "description": "Kanban boards for task management.", "connected": False},
-        ]
-        return Response(integrations)
+        db = get_db_handle()
+        username = request.user.username
+        
+        # Fetch user's connected integrations
+        user_integrations = list(db.integrations.find({"username": username}, {'_id': 0}))
+        connected_map = {i['provider']: i for i in user_integrations}
+
+        # Merge catalog with user status
+        response_data = []
+        for item in INTEGRATION_CATALOG:
+            provider = item['provider']
+            is_connected = provider in connected_map
+            
+            data = item.copy()
+            data['connected'] = is_connected
+            
+            if is_connected:
+                data['last_synced'] = connected_map[provider].get('last_synced', 'Never')
+                data['config'] = connected_map[provider].get('config', {})
+            else:
+                data['last_synced'] = None
+            
+            response_data.append(data)
+
+        return Response(response_data)
+
+class IntegrationConnect(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        db = get_db_handle()
+        username = request.user.username
+        data = request.data
+        
+        provider = data.get('provider')
+        api_key = data.get('api_key')
+        config = data.get('config', {})
+        
+        if not provider or not api_key:
+             return Response({"error": "Provider and API Key are required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Upsert integration
+        integration = {
+            "username": username,
+            "provider": provider,
+            "api_key_masked": f"****{api_key[-4:]}", # Store masked for display (Real app should encrypt key)
+            "config": config,
+            "connected_at": datetime.datetime.utcnow(),
+            "last_synced": datetime.datetime.utcnow().isoformat()
+        }
+        
+        db.integrations.update_one(
+            {"username": username, "provider": provider},
+            {"$set": integration},
+            upsert=True
+        )
+        
+        return Response({"status": "connected", "provider": provider})
+
+class IntegrationDisconnect(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        db = get_db_handle()
+        username = request.user.username
+        provider = request.data.get('provider')
+        
+        if not provider:
+            return Response({"error": "Provider is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        result = db.integrations.delete_one({"username": username, "provider": provider})
+        
+        if result.deleted_count > 0:
+            return Response({"status": "disconnected"})
+        return Response({"error": "Integration not found"}, status=status.HTTP_404_NOT_FOUND)
 
 class BenchmarkList(APIView):
     def get(self, request):
