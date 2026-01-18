@@ -16,24 +16,18 @@ import {
     Trash2,
     Edit3
 } from 'lucide-react';
-import { mockTeamMembers } from '@/lib/mockData';
 
 export default function TeamPage() {
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedRole, setSelectedRole] = useState<string>('all');
 
-    const filteredMembers = mockTeamMembers.filter(member => {
-        const matchesSearch = member.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            member.email.toLowerCase().includes(searchQuery.toLowerCase());
-        const matchesRole = selectedRole === 'all' || member.role.toLowerCase() === selectedRole;
-        return matchesSearch && matchesRole;
-    });
+    const filteredMembers: any[] = []; // No real members data yet
 
     const stats = {
-        total: mockTeamMembers.length,
-        active: mockTeamMembers.filter(m => m.status === 'active').length,
-        pending: 3,
-        avgActivity: 8.2
+        total: 0,
+        active: 0,
+        pending: 0,
+        avgActivity: 0
     };
 
     const getRoleBadgeColor = (role: string) => {

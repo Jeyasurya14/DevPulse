@@ -33,84 +33,93 @@ import {
     AreaChart,
     Area
 } from 'recharts';
+import useSWR from 'swr';
+import { fetchAPI } from '@/lib/api';
 
 export default function AnalyticsPage() {
+    const { data: stats } = useSWR('/api/dashboard/stats/', fetchAPI);
     const [dateRange, setDateRange] = useState('30d');
     const [chartType, setChartType] = useState<'line' | 'area'>('area');
 
-    // Mock data for charts
+    // Real data for charts (fallback to zeros)
+    const trends = stats?.deployment_trends || [0, 0, 0, 0, 0, 0, 0];
     const chartData = [
-        { name: 'Mon', deployments: 12, leadTime: 2.4, failures: 1 },
-        { name: 'Tue', deployments: 18, leadTime: 2.1, failures: 0 },
-        { name: 'Wed', deployments: 15, leadTime: 2.5, failures: 2 },
-        { name: 'Thu', deployments: 22, leadTime: 1.9, failures: 1 },
-        { name: 'Fri', deployments: 28, leadTime: 1.8, failures: 0 },
-        { name: 'Sat', deployments: 8, leadTime: 2.2, failures: 0 },
-        { name: 'Sun', deployments: 5, leadTime: 2.3, failures: 0 },
+        { name: 'Mon', deployments: trends[0] || 0 },
+        { name: 'Tue', deployments: trends[1] || 0 },
+        { name: 'Wed', deployments: trends[2] || 0 },
+        { name: 'Thu', deployments: trends[3] || 0 },
+        { name: 'Fri', deployments: trends[4] || 0 },
+        { name: 'Sat', deployments: trends[5] || 0 },
+        { name: 'Sun', deployments: trends[6] || 0 },
     ];
 
     const statsCards = [
         {
             icon: Activity,
             label: 'Total Requests',
-            value: '12,456',
-            change: '+15%',
-            trend: 'up',
+            value: '-',
+            change: '0%',
+            trend: 'neutral',
             color: 'blue'
         },
         {
             icon: Server,
             label: 'Avg Latency',
-            value: '42ms',
-            change: '-8%',
-            trend: 'up',
+            value: '-',
+            change: '0%',
+            trend: 'neutral',
             color: 'emerald'
         },
         {
             icon: AlertTriangle,
             label: 'Error Rate',
-            value: '0.18%',
-            change: '-12%',
-            trend: 'up',
+            value: '-',
+            change: '0%',
+            trend: 'neutral',
             color: 'amber'
         },
         {
             icon: Zap,
             label: 'Credits Used',
-            value: '78%',
-            change: '+5%',
+            value: '-',
+            change: '0%',
             trend: 'neutral',
             color: 'purple'
         },
     ];
 
     const doraMetrics = [
-        { label: 'Deployment Frequency', value: '4.2/day', change: '+12%', trend: 'up', icon: GitBranch },
-        { label: 'Lead Time', value: '2.3 days', change: '-18%', trend: 'up', icon: Clock },
-        { label: 'Change Failure Rate', value: '3.2%', change: '-8%', trend: 'up', icon: AlertTriangle },
-        { label: 'MTTR', value: '45 min', change: '-25%', trend: 'up', icon: RefreshCw },
+        {
+            label: 'Deployment Frequency',
+            value: stats?.dora_metrics?.deployment_frequency?.value || '-',
+            change: stats?.dora_metrics?.deployment_frequency?.change || '',
+            trend: stats?.dora_metrics?.deployment_frequency?.trend || 'neutral',
+            icon: GitBranch
+        },
+        {
+            label: 'Lead Time',
+            value: stats?.dora_metrics?.lead_time?.value || '-',
+            change: stats?.dora_metrics?.lead_time?.change || '',
+            trend: stats?.dora_metrics?.lead_time?.trend || 'neutral',
+            icon: Clock
+        },
+        {
+            label: 'Change Failure Rate',
+            value: stats?.dora_metrics?.change_failure_rate?.value || '-',
+            change: stats?.dora_metrics?.change_failure_rate?.change || '',
+            trend: stats?.dora_metrics?.change_failure_rate?.trend || 'neutral',
+            icon: AlertTriangle
+        },
+        {
+            label: 'MTTR',
+            value: stats?.dora_metrics?.mttr?.value || '-',
+            change: stats?.dora_metrics?.mttr?.change || '',
+            trend: stats?.dora_metrics?.mttr?.trend || 'neutral',
+            icon: RefreshCw
+        },
     ];
 
-    const insights = [
-        {
-            type: 'info',
-            title: 'Traffic Spike Detected',
-            description: 'Usage peaked on Friday. Consider enabling auto-scaling for high-traffic periods.',
-            color: 'blue'
-        },
-        {
-            type: 'success',
-            title: 'Performance Optimal',
-            description: 'Your database latency is below 50ms - well within acceptable range.',
-            color: 'emerald'
-        },
-        {
-            type: 'warning',
-            title: 'Resource Alert',
-            description: 'API credits at 78% usage. Consider upgrading for uninterrupted service.',
-            color: 'amber'
-        },
-    ];
+    const insights: any[] = [];
 
     return (
         <div className="h-full bg-neutral-50 text-neutral-900 font-sans">

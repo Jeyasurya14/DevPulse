@@ -16,55 +16,51 @@ import {
     TrendingUp,
     Star
 } from 'lucide-react';
-import { mockSecurityIssues } from '@/lib/mockData';
 
 export default function CodeGovernancePage() {
     const [activeTab, setActiveTab] = useState<'vulnerabilities' | 'reviews' | 'quality'>('vulnerabilities');
+    const mockSecurityIssues: any[] = []; // Empty for now
 
     const summaryCards = [
         {
             icon: Shield,
             label: 'Security Status',
-            value: '3 issues',
-            detail: '0 Critical | 1 High | 2 Medium',
+            value: '0 issues',
+            detail: '0 Critical | 0 High | 0 Medium',
             color: 'warning',
             action: 'Review Now'
         },
         {
             icon: Star,
             label: 'Code Quality Score',
-            value: '8.7/10',
-            detail: '↑ 0.3 from last week',
+            value: '-',
+            detail: 'No data available',
             color: 'success',
             action: 'View Details'
         },
         {
             icon: GitPullRequest,
             label: 'Active Reviews',
-            value: '12 PRs',
-            detail: 'Avg review time: 3.2 hrs',
+            value: '0 PRs',
+            detail: 'Queue empty',
             color: 'blue',
             action: 'View Queue'
         },
         {
             icon: CheckCircle,
             label: 'Auto-merged Today',
-            value: '23 PRs',
+            value: '0 PRs',
             detail: 'Based on quality rules',
             color: 'emerald',
             action: 'Review Rules'
         }
     ];
 
-    const pendingReviews = [
-        { id: '#456', title: 'Add user authentication flow', author: 'Sarah C.', complexity: 'Medium', aiSummary: 'Changes look good. Minor style inconsistencies detected.', time: '2.1 hrs' },
-        { id: '#457', title: 'Refactor database queries', author: 'Mike J.', complexity: 'High', aiSummary: 'Performance improvement detected. Consider adding index.', time: '4.5 hrs' },
-        { id: '#458', title: 'Update API endpoints', author: 'Emma D.', complexity: 'Low', aiSummary: 'All tests passing. Ready for approval.', time: '1.2 hrs' },
-    ];
+    const pendingReviews: any[] = [];
 
     const tabs = [
-        { id: 'vulnerabilities', label: 'Security Vulnerabilities', count: mockSecurityIssues.filter(i => i.status !== 'resolved').length },
-        { id: 'reviews', label: 'Code Reviews', count: pendingReviews.length },
+        { id: 'vulnerabilities', label: 'Security Vulnerabilities', count: 0 },
+        { id: 'reviews', label: 'Code Reviews', count: 0 },
         { id: 'quality', label: 'Quality Trends', count: null },
     ];
 
@@ -104,14 +100,14 @@ export default function CodeGovernancePage() {
                         <div key={idx} className="bg-white p-5 rounded-xl border border-neutral-100 shadow-card hover:shadow-card-hover transition-shadow">
                             <div className="flex items-start justify-between mb-3">
                                 <div className={`p-2.5 rounded-lg ${card.color === 'warning' ? 'bg-warning-50' :
-                                        card.color === 'success' ? 'bg-success-50' :
-                                            card.color === 'blue' ? 'bg-devpulse-blue-50' :
-                                                'bg-emerald-50'
+                                    card.color === 'success' ? 'bg-success-50' :
+                                        card.color === 'blue' ? 'bg-devpulse-blue-50' :
+                                            'bg-emerald-50'
                                     }`}>
                                     <card.icon size={20} className={`${card.color === 'warning' ? 'text-warning-600' :
-                                            card.color === 'success' ? 'text-success-600' :
-                                                card.color === 'blue' ? 'text-devpulse-blue-600' :
-                                                    'text-emerald-600'
+                                        card.color === 'success' ? 'text-success-600' :
+                                            card.color === 'blue' ? 'text-devpulse-blue-600' :
+                                                'text-emerald-600'
                                         }`} />
                                 </div>
                             </div>
@@ -132,15 +128,15 @@ export default function CodeGovernancePage() {
                             key={tab.id}
                             onClick={() => setActiveTab(tab.id as any)}
                             className={`px-4 py-3 text-sm font-semibold transition-colors border-b-2 -mb-px ${activeTab === tab.id
-                                    ? 'text-devpulse-blue-600 border-devpulse-blue-600'
-                                    : 'text-neutral-500 border-transparent hover:text-neutral-700'
+                                ? 'text-devpulse-blue-600 border-devpulse-blue-600'
+                                : 'text-neutral-500 border-transparent hover:text-neutral-700'
                                 }`}
                         >
                             {tab.label}
                             {tab.count !== null && (
                                 <span className={`ml-2 px-2 py-0.5 rounded-full text-xs ${activeTab === tab.id
-                                        ? 'bg-devpulse-blue-50 text-devpulse-blue-600'
-                                        : 'bg-neutral-100 text-neutral-500'
+                                    ? 'bg-devpulse-blue-50 text-devpulse-blue-600'
+                                    : 'bg-neutral-100 text-neutral-500'
                                     }`}>
                                     {tab.count}
                                 </span>
@@ -211,8 +207,8 @@ export default function CodeGovernancePage() {
                                     </div>
                                     <div className="flex items-center gap-3">
                                         <span className={`px-2.5 py-1 rounded-full text-xs font-bold ${pr.complexity === 'High' ? 'bg-error-50 text-error-600' :
-                                                pr.complexity === 'Medium' ? 'bg-warning-50 text-warning-600' :
-                                                    'bg-success-50 text-success-600'
+                                            pr.complexity === 'Medium' ? 'bg-warning-50 text-warning-600' :
+                                                'bg-success-50 text-success-600'
                                             }`}>
                                             {pr.complexity}
                                         </span>
