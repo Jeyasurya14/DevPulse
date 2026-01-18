@@ -120,3 +120,36 @@ class StatsView(APIView):
                 })
 
         return Response(stats)
+
+class TeamMemberList(APIView):
+    def get(self, request):
+        db = get_db_handle()
+        members = list(db.team_members.find({}, {'_id': 0}))
+        return Response(members)
+
+    def post(self, request):
+        db = get_db_handle()
+        data = request.data
+        
+        # Basic Validation
+        if not data.get('email') or not data.get('name'):
+            return Response({"error": "Name and Email are required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Check for duplicate email
+        if db.team_members.find_one({"email": data['email']}):
+             return Response({"error": "Member with this email already exists"}, status=status.HTTP_400_BAD_REQUEST)
+
+        member = {
+            "name": data['name'],
+            "email": data['email'],
+            "role": data.get('role', 'Viewer'),
+            "status": "active", # Auto-active for demo
+            "activity": "medium", # Default activity
+            "avatar": f"https://ui-avatars.com/api/?name={data['name'].replace(' ', '+')}&background=random",
+            "joined_at": datetime.datetime.utcnow().isoformat()
+        }
+        
+        db.team_members.insert_one(member)
+        del member['_id']
+        
+        return Response(member, status=status.HTTP_201_CREATED)

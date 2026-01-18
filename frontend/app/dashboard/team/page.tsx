@@ -17,17 +17,31 @@ import {
     Edit3
 } from 'lucide-react';
 
+import { fetchAPI } from '@/lib/api';
+import useSWR from 'swr';
+import InviteMemberModal from '@/components/dashboard/InviteMemberModal';
+
 export default function TeamPage() {
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedRole, setSelectedRole] = useState<string>('all');
+    const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
 
-    const filteredMembers: any[] = []; // No real members data yet
+    const { data: members, isLoading } = useSWR('/api/dashboard/team/members/', fetchAPI);
+
+    const safeMembers = Array.isArray(members) ? members : [];
+
+    const filteredMembers = safeMembers.filter((member: any) => {
+        const matchesSearch = member.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            member.email.toLowerCase().includes(searchQuery.toLowerCase());
+        const matchesRole = selectedRole === 'all' || member.role.toLowerCase() === selectedRole.toLowerCase();
+        return matchesSearch && matchesRole;
+    });
 
     const stats = {
-        total: 0,
-        active: 0,
-        pending: 0,
-        avgActivity: 0
+        total: safeMembers.length,
+        active: safeMembers.filter((m: any) => m.status === 'active').length,
+        pending: 0, // Mock pending for now or add to backend
+        avgActivity: 8.2 // Placeholder
     };
 
     const getRoleBadgeColor = (role: string) => {
@@ -55,10 +69,15 @@ export default function TeamPage() {
                         <h1 className="text-2xl md:text-3xl font-bold text-neutral-900 mb-1">Team Management</h1>
                         <p className="text-neutral-500">Manage members, roles, and permissions</p>
                     </div>
-                    <Button variant="cta" leftIcon={<UserPlus size={18} />}>
+                    <Button variant="cta" leftIcon={<UserPlus size={18} />} onClick={() => setIsInviteModalOpen(true)}>
                         Invite Members
                     </Button>
                 </div>
+
+                <InviteMemberModal
+                    isOpen={isInviteModalOpen}
+                    onClose={() => setIsInviteModalOpen(false)}
+                />
 
                 {/* Stats Cards */}
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
