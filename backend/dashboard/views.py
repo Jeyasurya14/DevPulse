@@ -158,8 +158,8 @@ class IntegrationList(APIView):
     def get(self, request):
         # Seeded Integrations Data
         integrations = [
-            {"name": "GitHub", "provider": "github", "description": "Sync code repositories and track PRs.", "connected": True, "last_synced": "10 min ago"},
-            {"name": "Slack", "provider": "slack", "description": "Get real-time alerts and notifications.", "connected": True, "last_synced": "1 hour ago"},
+            {"name": "GitHub", "provider": "github", "description": "Sync code repositories and track PRs.", "connected": True, "last_synced": "Just now"},
+            {"name": "Slack", "provider": "slack", "description": "Get real-time alerts and notifications.", "connected": False},
             {"name": "Jira", "provider": "jira", "description": "Track issues and project progress.", "connected": False},
             {"name": "GitLab", "provider": "gitlab", "description": "CI/CD pipelines and source control.", "connected": False},
             {"name": "Trello", "provider": "trello", "description": "Kanban boards for task management.", "connected": False},

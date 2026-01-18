@@ -16,6 +16,16 @@ export async function fetchAPI(endpoint: string, options: RequestInit = {}) {
         });
 
         if (!res.ok) {
+            // Handle 401 Unauthorized (Token expired or invalid)
+            if (res.status === 401) {
+                if (typeof window !== 'undefined') {
+                    localStorage.removeItem('access_token');
+                    localStorage.removeItem('user');
+                    window.location.href = '/login';
+                }
+                throw new Error('Session expired. Redirecting to login...');
+            }
+
             // Handle Network Errors (CORS/Offline) which often have status 0 or empty statusText
             const status = res.status || 0;
             const statusText = res.statusText || 'Network Error (possibly CORS)';

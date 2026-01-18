@@ -16,7 +16,9 @@ import {
     Clock,
     ExternalLink,
     GitBranch,
-    Circle
+    Circle,
+    Gitlab,
+    ListTodo
 } from 'lucide-react';
 import useSWR from 'swr';
 import { fetchAPI } from '@/lib/api';
@@ -50,8 +52,9 @@ export default function IntegrationsPage() {
         const n = name?.toLowerCase() || '';
         const iconClass = "text-inherit";
         if (n.includes('github')) return <Github size={28} className={iconClass} />;
-        if (n.includes('gitlab')) return <GitBranch size={28} className={iconClass} />;
-        if (n.includes('jira') || n.includes('trello')) return <Trello size={28} className={iconClass} />;
+        if (n.includes('gitlab')) return <Gitlab size={28} className={iconClass} />;
+        if (n.includes('jira')) return <ListTodo size={28} className={iconClass} />;
+        if (n.includes('trello')) return <Trello size={28} className={iconClass} />;
         if (n.includes('slack')) return <Slack size={28} className={iconClass} />;
         return <Layers size={28} className={iconClass} />;
     };
