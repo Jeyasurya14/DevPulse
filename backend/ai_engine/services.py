@@ -1,14 +1,62 @@
 
 import re
+import os
+import json
+import logging
+
+try:
+    from openai import OpenAI
+except ImportError:
+    OpenAI = None
+
+logger = logging.getLogger(__name__)
 
 class AICodeAnalyzer:
     def __init__(self):
-        pass
+        self.api_key = os.getenv("OPENAI_API_KEY")
+        self.client = OpenAI(api_key=self.api_key) if self.api_key and OpenAI else None
 
     def analyze_snippet(self, code_snippet, language="python"):
         """
-        Analyze a code snippet using heuristic rules to simulate AI.
+        Analyze a code snippet. Tries to use GPT-4o if available, otherwise falls back to heuristics.
         Returns score (0-100) and list of issues.
+        """
+        if self.client:
+            try:
+                return self._analyze_with_gpt4o(code_snippet, language)
+            except Exception as e:
+                logger.error(f"GPT-4o analysis failed: {e}")
+                # Fallback to heuristics on error
+        
+        return self._analyze_heuristically(code_snippet)
+
+    def _analyze_with_gpt4o(self, code_snippet, language):
+        prompt = f"""
+        Analyze this {language} code snippet for quality, security, and best practices.
+        Return a JSON object with:
+        - "score": integer 0-100
+        - "summary": string (brief summary of quality)
+        - "issues": list of objects {{ "type": "critical"|"warning"|"info", "message": "...", "line": int (line number or 0) }}
+        
+        Code:
+        {code_snippet}
+        """
+
+        response = self.client.chat.completions.create(
+            model="gpt-4o",
+            messages=[
+                {"role": "system", "content": "You are a senior software engineer and code quality expert. Output strict JSON only."},
+                {"role": "user", "content": prompt}
+            ],
+            response_format={"type": "json_object"}
+        )
+        
+        content = response.choices[0].message.content
+        return json.loads(content)
+
+    def _analyze_heuristically(self, code_snippet):
+        """
+        Fallback: Analyze a code snippet using heuristic rules.
         """
         issues = []
         score = 100
@@ -22,6 +70,7 @@ class AICodeAnalyzer:
             })
             score -= 10
 
+        # ... (rest of heuristic logic maintained for fallback) ...
         # 2. Check for broad exceptions
         if "except Exception:" in code_snippet or "except:" in code_snippet:
             issues.append({
