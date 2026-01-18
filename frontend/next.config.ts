@@ -7,6 +7,14 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: process.cwd(),
   },
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: 'https://devpulse-backend.learn-made.in/api/:path*',
+      },
+    ]
+  },
 };
 
 export default nextConfig;
