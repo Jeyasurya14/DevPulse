@@ -98,6 +98,13 @@ class StatsView(APIView):
             "apiUsage": 0, # Placeholder for future API Usage tracking
             "team_velocity": f"{velocity} pts",
             "active_members": active_members,
+            "dora_metrics": {
+                "deployment_frequency": {"value": "0.0", "unit": "/day", "change": "0%", "trend": "neutral"},
+                "lead_time": {"value": "0", "unit": "min", "change": "0%", "trend": "neutral"},
+                "change_failure_rate": {"value": "0", "unit": "%", "change": "0%", "trend": "neutral"},
+                "mttr": {"value": "0", "unit": "min", "change": "0%", "trend": "neutral"}
+            },
+            "deployment_trends": [0, 0, 0, 0, 0, 0, 0], # Placeholder for last 7 days deploys
             "recent_activity": [] 
         }
         

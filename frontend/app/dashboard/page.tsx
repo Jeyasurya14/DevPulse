@@ -31,6 +31,13 @@ interface DashboardStats {
     apiUsage: number;
     team_velocity?: string;
     active_members?: number;
+    dora_metrics?: {
+        deployment_frequency: { value: string; unit: string; change: string; trend: 'up' | 'down' | 'neutral' };
+        lead_time: { value: string; unit: string; change: string; trend: 'up' | 'down' | 'neutral' };
+        change_failure_rate: { value: string; unit: string; change: string; trend: 'up' | 'down' | 'neutral' };
+        mttr: { value: string; unit: string; change: string; trend: 'up' | 'down' | 'neutral' };
+    };
+    deployment_trends?: number[];
     recent_activity: {
         title: string;
         time: string;
@@ -118,9 +125,11 @@ export default function DashboardPage() {
                                 <span className="text-xs font-semibold text-neutral-500 uppercase tracking-wide">Deploys/Day</span>
                                 <TrendingUp size={16} className="text-success-500" />
                             </div>
-                            <div className="text-3xl font-bold text-neutral-900 mb-1">12.4</div>
+                            <div className="text-3xl font-bold text-neutral-900 mb-1">
+                                {isLoading ? '-' : stats?.dora_metrics?.deployment_frequency?.value || '0.0'}
+                            </div>
                             <div className="text-xs font-medium text-success-600 flex items-center gap-1">
-                                +24% <span className="text-neutral-400 font-normal">vs last week</span>
+                                {stats?.dora_metrics?.deployment_frequency?.change || '0%'} <span className="text-neutral-400 font-normal">vs last week</span>
                             </div>
                         </div>
 
@@ -130,9 +139,12 @@ export default function DashboardPage() {
                                 <span className="text-xs font-semibold text-neutral-500 uppercase tracking-wide">Lead Time</span>
                                 <Clock size={16} className="text-success-500" />
                             </div>
-                            <div className="text-3xl font-bold text-neutral-900 mb-1">45m</div>
+                            <div className="text-3xl font-bold text-neutral-900 mb-1">
+                                {isLoading ? '-' : stats?.dora_metrics?.lead_time?.value || '0'}
+                                <span className="text-lg font-medium text-neutral-400 ml-1">{stats?.dora_metrics?.lead_time?.unit || 'min'}</span>
+                            </div>
                             <div className="text-xs font-medium text-success-600 flex items-center gap-1">
-                                -15% <span className="text-neutral-400 font-normal">faster</span>
+                                {stats?.dora_metrics?.lead_time?.change || '0%'} <span className="text-neutral-400 font-normal">faster</span>
                             </div>
                         </div>
 
@@ -142,9 +154,11 @@ export default function DashboardPage() {
                                 <span className="text-xs font-semibold text-neutral-500 uppercase tracking-wide">Failure Rate</span>
                                 <Shield size={16} className="text-success-500" />
                             </div>
-                            <div className="text-3xl font-bold text-neutral-900 mb-1">0.8%</div>
+                            <div className="text-3xl font-bold text-neutral-900 mb-1">
+                                {isLoading ? '-' : stats?.dora_metrics?.change_failure_rate?.value || '0%'}
+                            </div>
                             <div className="text-xs font-medium text-devpulse-blue-600 flex items-center gap-1">
-                                Elite Status
+                                {stats?.dora_metrics?.change_failure_rate?.value === '0%' ? 'No Data' : 'Elite Status'}
                             </div>
                         </div>
 
@@ -177,10 +191,10 @@ export default function DashboardPage() {
                                 </div>
                             </div>
                             <div className="flex-1 flex items-end justify-between gap-4 px-2 pb-2">
-                                {[40, 65, 45, 80, 55, 90, 75, 60, 85, 50, 70, 95].map((h, i) => (
+                                {(stats?.deployment_trends || [0, 0, 0, 0, 0, 0, 0]).map((h, i) => (
                                     <div key={i} className="w-full bg-devpulse-blue-50/50 rounded-t-lg relative group h-full flex items-end">
                                         <div
-                                            style={{ height: `${h}%` }}
+                                            style={{ height: `${h > 100 ? 100 : h}%` }}
                                             className="w-full bg-devpulse-blue-500 rounded-t-lg group-hover:bg-devpulse-blue-600 transition-all cursor-pointer relative"
                                         >
                                             <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-neutral-900 text-white text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity">
@@ -227,7 +241,7 @@ export default function DashboardPage() {
                                     stats.recent_activity.map((item, idx) => (
                                         <div key={idx} className="flex gap-3 relative group">
                                             <div className={`mt-1.5 w-2 h-2 rounded-full shrink-0 ${item.type === 'success' ? 'bg-success-500' :
-                                                    item.type === 'warning' ? 'bg-warning-500' : 'bg-devpulse-blue-500'
+                                                item.type === 'warning' ? 'bg-warning-500' : 'bg-devpulse-blue-500'
                                                 }`} />
                                             <div>
                                                 <p className="text-sm font-medium text-neutral-800 leading-tight group-hover:text-devpulse-blue-600 transition-colors">
