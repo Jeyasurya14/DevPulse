@@ -1,76 +1,126 @@
-import React from 'react';
-import { ArrowUpRight, ArrowDownRight, Minus } from 'lucide-react';
+'use client';
+
+import { TrendingUp, TrendingDown, Minus } from 'lucide-react';
 
 interface PremiumStatCardProps {
     title: string;
-    value: string | number;
-    change?: string;
-    trend?: 'up' | 'down' | 'neutral';
-    icon?: React.ReactNode;
+    value: number | string;
+    change: string;
+    trend: 'up' | 'down' | 'neutral';
+    icon: React.ReactNode;
+    color: 'blue' | 'purple' | 'emerald' | 'amber' | 'rose';
     isLoading?: boolean;
-    color?: 'brand' | 'purple' | 'amber' | 'emerald';
 }
 
 export default function PremiumStatCard({
     title,
     value,
     change,
-    trend = 'neutral',
+    trend,
     icon,
-    isLoading = false,
-    color = 'brand'
+    color,
+    isLoading = false
 }: PremiumStatCardProps) {
-
-    const colorMap = {
-        brand: 'bg-brand-500',
-        purple: 'bg-indigo-500',
-        amber: 'bg-amber-500',
-        emerald: 'bg-emerald-500',
+    const colorStyles = {
+        blue: {
+            bg: 'bg-devpulse-blue-50',
+            icon: 'text-devpulse-blue-600',
+            gradient: 'from-devpulse-blue-50 to-white',
+            border: 'border-devpulse-blue-100',
+            accent: 'bg-devpulse-blue-600',
+        },
+        purple: {
+            bg: 'bg-purple-50',
+            icon: 'text-purple-600',
+            gradient: 'from-purple-50 to-white',
+            border: 'border-purple-100',
+            accent: 'bg-purple-600',
+        },
+        emerald: {
+            bg: 'bg-emerald-50',
+            icon: 'text-emerald-600',
+            gradient: 'from-emerald-50 to-white',
+            border: 'border-emerald-100',
+            accent: 'bg-emerald-600',
+        },
+        amber: {
+            bg: 'bg-amber-50',
+            icon: 'text-amber-600',
+            gradient: 'from-amber-50 to-white',
+            border: 'border-amber-100',
+            accent: 'bg-amber-600',
+        },
+        rose: {
+            bg: 'bg-rose-50',
+            icon: 'text-rose-600',
+            gradient: 'from-rose-50 to-white',
+            border: 'border-rose-100',
+            accent: 'bg-rose-600',
+        },
     };
 
-    const bgMap = {
-        brand: 'bg-brand-50 text-brand-600',
-        purple: 'bg-indigo-50 text-indigo-600',
-        amber: 'bg-amber-50 text-amber-600',
-        emerald: 'bg-emerald-50 text-emerald-600',
-    }
+    const styles = colorStyles[color];
+
+    const trendStyles = {
+        up: {
+            bg: 'bg-success-50',
+            text: 'text-success-700',
+            icon: TrendingUp,
+        },
+        down: {
+            bg: 'bg-error-50',
+            text: 'text-error-700',
+            icon: TrendingDown,
+        },
+        neutral: {
+            bg: 'bg-neutral-100',
+            text: 'text-neutral-600',
+            icon: Minus,
+        },
+    };
+
+    const trendStyle = trendStyles[trend];
+    const TrendIcon = trendStyle.icon;
 
     if (isLoading) {
         return (
-            <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm relative overflow-hidden">
-                <div className="flex justify-between items-start mb-4">
-                    <div className="w-10 h-10 rounded-xl bg-slate-100 animate-pulse" />
-                    <div className="w-16 h-6 rounded-full bg-slate-50 animate-pulse" />
+            <div className="bg-white rounded-2xl border border-neutral-100 p-6 shadow-card animate-pulse">
+                <div className="flex items-start justify-between mb-4">
+                    <div className="w-12 h-12 rounded-xl bg-neutral-100" />
+                    <div className="w-16 h-6 rounded-full bg-neutral-100" />
                 </div>
-                <div className="h-4 w-24 bg-slate-100 rounded animate-pulse mb-2" />
-                <div className="h-8 w-16 bg-slate-100 rounded animate-pulse" />
+                <div className="h-4 w-24 bg-neutral-100 rounded mb-2" />
+                <div className="h-8 w-16 bg-neutral-100 rounded" />
             </div>
-        )
+        );
     }
 
     return (
-        <div className="group bg-white p-6 rounded-3xl border border-slate-100 shadow-premium hover:shadow-lg hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
-            {/* Background Blob */}
-            <div className={`absolute -right-6 -top-6 w-24 h-24 rounded-full opacity-[0.03] group-hover:opacity-[0.08] transition-opacity ${colorMap[color]}`} />
+        <div className={`
+            relative bg-white rounded-2xl border ${styles.border} p-6 
+            shadow-card hover:shadow-card-hover transition-all duration-300
+            hover:-translate-y-0.5 group overflow-hidden
+        `}>
+            {/* Subtle gradient background */}
+            <div className={`absolute inset-0 bg-gradient-to-br ${styles.gradient} opacity-50`} />
 
-            <div className="flex justify-between items-start mb-4 relative z-10">
-                <div className={`p-3 rounded-2xl ${bgMap[color]}`}>
-                    {icon}
-                </div>
-                {change && (
-                    <div className={`flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full ${trend === 'up' ? 'bg-green-50 text-green-700' :
-                        trend === 'down' ? 'bg-red-50 text-red-700' : 'bg-slate-50 text-slate-600'
-                        }`}>
-                        {trend === 'up' && <ArrowUpRight size={12} />}
-                        {trend === 'down' && <ArrowDownRight size={12} />}
-                        {trend === 'neutral' && <Minus size={12} />}
+            {/* Accent line on hover */}
+            <div className={`absolute top-0 left-0 right-0 h-0.5 ${styles.accent} transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300`} />
+
+            <div className="relative">
+                <div className="flex items-start justify-between mb-4">
+                    <div className={`w-12 h-12 rounded-xl ${styles.bg} flex items-center justify-center ${styles.icon} group-hover:scale-110 transition-transform`}>
+                        {icon}
+                    </div>
+                    <div className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold ${trendStyle.bg} ${trendStyle.text}`}>
+                        <TrendIcon size={12} />
                         {change}
                     </div>
-                )}
-            </div>
+                </div>
 
-            <h3 className="text-slate-500 text-sm font-medium mb-1 relative z-10">{title}</h3>
-            <p className="text-3xl font-bold text-slate-900 tracking-tight relative z-10">{value}</p>
+                <p className="text-sm font-medium text-neutral-500 mb-1">{title}</p>
+                <p className="text-3xl font-bold text-neutral-900">{value}</p>
+            </div>
         </div>
     );
 }

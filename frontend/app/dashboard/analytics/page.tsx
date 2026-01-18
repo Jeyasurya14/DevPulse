@@ -1,70 +1,306 @@
+'use client';
 
-import Sidebar from '@/components/dashboard/Sidebar';
-import UsageChart from '@/components/dashboard/UsageChart';
-import { Activity, Server, AlertTriangle, Zap } from 'lucide-react';
+import { useState } from 'react';
+import { Button } from '@/components/ui';
+import {
+    Activity,
+    Server,
+    AlertTriangle,
+    Zap,
+    Calendar,
+    Download,
+    TrendingUp,
+    TrendingDown,
+    ArrowUpRight,
+    BarChart3,
+    LineChart,
+    PieChart,
+    Filter,
+    RefreshCw,
+    Gauge,
+    Clock,
+    GitBranch,
+    Users
+} from 'lucide-react';
+import {
+    LineChart as RechartsLineChart,
+    Line,
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    Tooltip,
+    ResponsiveContainer,
+    AreaChart,
+    Area
+} from 'recharts';
 
 export default function AnalyticsPage() {
+    const [dateRange, setDateRange] = useState('30d');
+    const [chartType, setChartType] = useState<'line' | 'area'>('area');
+
+    // Mock data for charts
+    const chartData = [
+        { name: 'Mon', deployments: 12, leadTime: 2.4, failures: 1 },
+        { name: 'Tue', deployments: 18, leadTime: 2.1, failures: 0 },
+        { name: 'Wed', deployments: 15, leadTime: 2.5, failures: 2 },
+        { name: 'Thu', deployments: 22, leadTime: 1.9, failures: 1 },
+        { name: 'Fri', deployments: 28, leadTime: 1.8, failures: 0 },
+        { name: 'Sat', deployments: 8, leadTime: 2.2, failures: 0 },
+        { name: 'Sun', deployments: 5, leadTime: 2.3, failures: 0 },
+    ];
+
+    const statsCards = [
+        {
+            icon: Activity,
+            label: 'Total Requests',
+            value: '12,456',
+            change: '+15%',
+            trend: 'up',
+            color: 'blue'
+        },
+        {
+            icon: Server,
+            label: 'Avg Latency',
+            value: '42ms',
+            change: '-8%',
+            trend: 'up',
+            color: 'emerald'
+        },
+        {
+            icon: AlertTriangle,
+            label: 'Error Rate',
+            value: '0.18%',
+            change: '-12%',
+            trend: 'up',
+            color: 'amber'
+        },
+        {
+            icon: Zap,
+            label: 'Credits Used',
+            value: '78%',
+            change: '+5%',
+            trend: 'neutral',
+            color: 'purple'
+        },
+    ];
+
+    const doraMetrics = [
+        { label: 'Deployment Frequency', value: '4.2/day', change: '+12%', trend: 'up', icon: GitBranch },
+        { label: 'Lead Time', value: '2.3 days', change: '-18%', trend: 'up', icon: Clock },
+        { label: 'Change Failure Rate', value: '3.2%', change: '-8%', trend: 'up', icon: AlertTriangle },
+        { label: 'MTTR', value: '45 min', change: '-25%', trend: 'up', icon: RefreshCw },
+    ];
+
+    const insights = [
+        {
+            type: 'info',
+            title: 'Traffic Spike Detected',
+            description: 'Usage peaked on Friday. Consider enabling auto-scaling for high-traffic periods.',
+            color: 'blue'
+        },
+        {
+            type: 'success',
+            title: 'Performance Optimal',
+            description: 'Your database latency is below 50ms - well within acceptable range.',
+            color: 'emerald'
+        },
+        {
+            type: 'warning',
+            title: 'Resource Alert',
+            description: 'API credits at 78% usage. Consider upgrading for uninterrupted service.',
+            color: 'amber'
+        },
+    ];
+
     return (
-        <div className="flex h-screen bg-slate-50 text-slate-900 font-sans">
-            <Sidebar />
-            <main className="flex-1 p-8 overflow-y-auto">
-                <header className="mb-8">
-                    <h1 className="text-3xl font-bold text-slate-900">System Analytics</h1>
-                    <p className="text-slate-500">Monitor your API usage and performance in real-time.</p>
+        <div className="h-full bg-neutral-50 text-neutral-900 font-sans">
+            <main className="p-6 md:p-8 lg:p-10 h-full overflow-y-auto scrollbar-thin">
+                {/* Header */}
+                <header className="flex flex-col lg:flex-row lg:justify-between lg:items-start mb-8 gap-4">
+                    <div>
+                        <h1 className="text-2xl md:text-3xl font-bold text-neutral-900 mb-1">Analytics</h1>
+                        <p className="text-neutral-500">Monitor your engineering metrics and performance in real-time.</p>
+                    </div>
+                    <div className="flex items-center gap-3 flex-wrap">
+                        <select
+                            value={dateRange}
+                            onChange={(e) => setDateRange(e.target.value)}
+                            className="bg-white border border-neutral-200 rounded-xl px-4 py-2.5 text-sm font-medium text-neutral-700 focus:outline-none focus:ring-2 focus:ring-devpulse-blue-500"
+                        >
+                            <option value="7d">Last 7 days</option>
+                            <option value="30d">Last 30 days</option>
+                            <option value="90d">Last 90 days</option>
+                        </select>
+                        <div className="flex items-center bg-white border border-neutral-200 rounded-xl p-1">
+                            <button
+                                onClick={() => setChartType('line')}
+                                className={`p-2 rounded-lg transition-colors ${chartType === 'line' ? 'bg-devpulse-blue-50 text-devpulse-blue-600' : 'text-neutral-400 hover:text-neutral-600'}`}
+                            >
+                                <LineChart size={18} />
+                            </button>
+                            <button
+                                onClick={() => setChartType('area')}
+                                className={`p-2 rounded-lg transition-colors ${chartType === 'area' ? 'bg-devpulse-blue-50 text-devpulse-blue-600' : 'text-neutral-400 hover:text-neutral-600'}`}
+                            >
+                                <BarChart3 size={18} />
+                            </button>
+                        </div>
+                        <Button variant="outline" leftIcon={<Download size={16} />}>
+                            Export
+                        </Button>
+                    </div>
                 </header>
 
                 {/* Stats Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-                    <StatsCard icon={<Activity />} label="Total Requests" value="1,245" color="blue" />
-                    <StatsCard icon={<Server />} label="Avg Latency" value="45ms" color="green" />
-                    <StatsCard icon={<AlertTriangle />} label="Error Rate" value="0.2%" color="red" />
-                    <StatsCard icon={<Zap />} label="Credits Used" value="85%" color="yellow" />
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
+                    {statsCards.map((stat, idx) => (
+                        <div key={idx} className="bg-white p-5 rounded-xl border border-neutral-100 shadow-card hover:shadow-card-hover transition-shadow">
+                            <div className="flex items-center justify-between mb-3">
+                                <div className={`p-2.5 rounded-lg bg-${stat.color === 'blue' ? 'devpulse-blue' : stat.color}-50`}>
+                                    <stat.icon size={20} className={`text-${stat.color === 'blue' ? 'devpulse-blue' : stat.color}-600`} />
+                                </div>
+                                <span className={`inline-flex items-center gap-1 text-xs font-bold px-2 py-0.5 rounded-full ${stat.trend === 'up' ? 'bg-success-50 text-success-700' : 'bg-neutral-100 text-neutral-600'
+                                    }`}>
+                                    {stat.trend === 'up' ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
+                                    {stat.change}
+                                </span>
+                            </div>
+                            <p className="text-sm text-neutral-500 mb-1">{stat.label}</p>
+                            <p className="text-2xl font-bold text-neutral-900">{stat.value}</p>
+                        </div>
+                    ))}
                 </div>
 
-                {/* Charts and Details */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <div className="lg:col-span-2">
-                        <UsageChart />
+                {/* DORA Metrics */}
+                <div className="bg-white rounded-2xl border border-neutral-100 shadow-card p-6 mb-8">
+                    <div className="flex items-center justify-between mb-6">
+                        <div className="flex items-center gap-3">
+                            <div className="p-2 bg-devpulse-yellow-50 rounded-lg">
+                                <Gauge size={20} className="text-devpulse-yellow-600" />
+                            </div>
+                            <div>
+                                <h2 className="font-bold text-lg text-neutral-900">DORA Metrics</h2>
+                                <p className="text-sm text-neutral-500">Key engineering performance indicators</p>
+                            </div>
+                        </div>
+                        <button className="text-sm font-semibold text-devpulse-blue-600 flex items-center gap-1 hover:gap-2 transition-all">
+                            View Details <ArrowUpRight size={14} />
+                        </button>
+                    </div>
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                        {doraMetrics.map((metric, idx) => (
+                            <div key={idx} className="p-4 bg-neutral-50 rounded-xl">
+                                <div className="flex items-center gap-2 mb-2">
+                                    <metric.icon size={14} className="text-neutral-400" />
+                                    <span className="text-xs font-medium text-neutral-500">{metric.label}</span>
+                                </div>
+                                <div className="flex items-baseline gap-2">
+                                    <span className="text-xl font-bold text-neutral-900">{metric.value}</span>
+                                    <span className={`text-xs font-bold ${metric.trend === 'up' ? 'text-success-600' : 'text-error-600'
+                                        }`}>
+                                        {metric.change}
+                                    </span>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Charts & Insights */}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    {/* Main Chart */}
+                    <div className="lg:col-span-2 bg-white rounded-2xl border border-neutral-100 shadow-card p-6">
+                        <div className="flex items-center justify-between mb-6">
+                            <h3 className="font-bold text-lg text-neutral-900">Deployment Trends</h3>
+                            <div className="flex items-center gap-4 text-sm">
+                                <div className="flex items-center gap-2">
+                                    <div className="w-3 h-3 rounded-full bg-devpulse-blue-500" />
+                                    <span className="text-neutral-500">Deployments</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="h-80">
+                            <ResponsiveContainer width="100%" height="100%">
+                                {chartType === 'area' ? (
+                                    <AreaChart data={chartData}>
+                                        <defs>
+                                            <linearGradient id="colorDeployments" x1="0" y1="0" x2="0" y2="1">
+                                                <stop offset="5%" stopColor="#0052CC" stopOpacity={0.2} />
+                                                <stop offset="95%" stopColor="#0052CC" stopOpacity={0} />
+                                            </linearGradient>
+                                        </defs>
+                                        <CartesianGrid strokeDasharray="3 3" stroke="#E4E7EC" />
+                                        <XAxis dataKey="name" stroke="#64748B" fontSize={12} />
+                                        <YAxis stroke="#64748B" fontSize={12} />
+                                        <Tooltip
+                                            contentStyle={{
+                                                backgroundColor: 'white',
+                                                border: '1px solid #E4E7EC',
+                                                borderRadius: '12px',
+                                                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                                            }}
+                                        />
+                                        <Area
+                                            type="monotone"
+                                            dataKey="deployments"
+                                            stroke="#0052CC"
+                                            strokeWidth={2}
+                                            fillOpacity={1}
+                                            fill="url(#colorDeployments)"
+                                        />
+                                    </AreaChart>
+                                ) : (
+                                    <RechartsLineChart data={chartData}>
+                                        <CartesianGrid strokeDasharray="3 3" stroke="#E4E7EC" />
+                                        <XAxis dataKey="name" stroke="#64748B" fontSize={12} />
+                                        <YAxis stroke="#64748B" fontSize={12} />
+                                        <Tooltip
+                                            contentStyle={{
+                                                backgroundColor: 'white',
+                                                border: '1px solid #E4E7EC',
+                                                borderRadius: '12px',
+                                                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                                            }}
+                                        />
+                                        <Line
+                                            type="monotone"
+                                            dataKey="deployments"
+                                            stroke="#0052CC"
+                                            strokeWidth={2}
+                                            dot={{ fill: '#0052CC', strokeWidth: 2 }}
+                                        />
+                                    </RechartsLineChart>
+                                )}
+                            </ResponsiveContainer>
+                        </div>
                     </div>
 
-                    {/* Insights Panel */}
-                    <div className="bg-white p-6 rounded-xl border border-slate-100 shadow-sm">
-                        <h3 className="text-lg font-bold mb-4">AI Insights</h3>
+                    {/* AI Insights */}
+                    <div className="bg-white rounded-2xl border border-neutral-100 shadow-card p-6">
+                        <div className="flex items-center gap-2 mb-6">
+                            <div className="p-2 bg-devpulse-blue-50 rounded-lg">
+                                <Zap size={18} className="text-devpulse-blue-600" />
+                            </div>
+                            <h3 className="font-bold text-lg text-neutral-900">AI Insights</h3>
+                        </div>
                         <div className="space-y-4">
-                            <div className="p-3 bg-blue-50 rounded-lg text-sm text-slate-700">
-                                <span className="font-bold text-blue-700 block mb-1">Traffic Spike</span>
-                                Usage peaked on Sunday. Consider enabling auto-scaling.
-                            </div>
-                            <div className="p-3 bg-green-50 rounded-lg text-sm text-slate-700">
-                                <span className="font-bold text-green-700 block mb-1">Optimization</span>
-                                Your database latency is optimal (under 50ms).
-                            </div>
+                            {insights.map((insight, idx) => (
+                                <div
+                                    key={idx}
+                                    className={`p-4 rounded-xl bg-${insight.color === 'blue' ? 'devpulse-blue' : insight.color}-50 border border-${insight.color === 'blue' ? 'devpulse-blue' : insight.color}-100`}
+                                >
+                                    <h4 className={`font-bold text-sm text-${insight.color === 'blue' ? 'devpulse-blue' : insight.color}-700 mb-1`}>
+                                        {insight.title}
+                                    </h4>
+                                    <p className="text-sm text-neutral-600">
+                                        {insight.description}
+                                    </p>
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </div>
-
             </main>
         </div>
     );
-}
-
-function StatsCard({ icon, label, value, color }: any) {
-    const colors: any = {
-        blue: 'bg-blue-100 text-blue-600',
-        green: 'bg-green-100 text-green-600',
-        red: 'bg-red-100 text-red-600',
-        yellow: 'bg-yellow-100 text-yellow-600',
-    };
-
-    return (
-        <div className="bg-white p-6 rounded-xl border border-slate-100 shadow-sm flex items-center space-x-4">
-            <div className={`p-3 rounded-lg ${colors[color]}`}>
-                {icon}
-            </div>
-            <div>
-                <p className="text-slate-500 text-sm font-medium">{label}</p>
-                <h4 className="text-2xl font-bold text-slate-900">{value}</h4>
-            </div>
-        </div>
-    )
 }

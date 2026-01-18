@@ -1,7 +1,6 @@
-
 'use client';
 
-import { Zap, Github, Lightbulb, ArrowRight } from 'lucide-react';
+import { Zap, Lightbulb, ArrowRight, Sparkles } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { fetchAPI } from '@/lib/api';
@@ -15,47 +14,80 @@ interface Recommendation {
 }
 
 export default function RecommendationWidget() {
-    // In a real app, fetch from /api/ai/recommendations/
-    // Using mock data for immediate UI feedback.
     const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
-
-    // Import fetchAPI (I need to add the import at top too, but replace_file_content handles contiguous blocks. I'll check imports separately or do multi-replace)
-    // Actually, I should check if fetchAPI is imported. It is NOT imported in the current file view (Step 1709).
-    // So I need to add import too.
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-    }, [])
+        // Fetch real recommendations when API is ready
+        fetchAPI('/api/ai/recommendations/')
+            .then(data => {
+                if (Array.isArray(data) && data.length > 0) {
+                    setRecommendations(data.slice(0, 2)); // Show top 2
+                } else {
+                    // Use placeholder if no data
+                    setRecommendations([
+                        {
+                            id: '1',
+                            title: 'Connect GitHub',
+                            description: 'Unlock code analytics and automated reviews.',
+                            action: '/dashboard/integrations',
+                            icon: 'Zap',
+                        },
+                    ]);
+                }
+            })
+            .catch(() => {
+                // Mock data for demo
+                setRecommendations([
+                    {
+                        id: '1',
+                        title: 'Run Code Analysis',
+                        description: 'Scan your code for potential improvements.',
+                        action: '/dashboard/analysis',
+                        icon: 'Sparkles',
+                    },
+                ]);
+            })
+            .finally(() => setIsLoading(false));
+    }, []);
 
     const getIcon = (name: string) => {
         switch (name) {
-            case 'Zap': return <Zap className="text-yellow-500" />;
-            case 'Github': return <Github className="text-slate-900" />;
-            case 'Lightbulb': return <Lightbulb className="text-blue-500" />;
-            default: return <Lightbulb />;
+            case 'Zap': return <Zap size={16} className="text-devpulse-yellow-500" />;
+            case 'Sparkles': return <Sparkles size={16} className="text-devpulse-blue-400" />;
+            default: return <Lightbulb size={16} className="text-devpulse-yellow-500" />;
         }
     };
 
+    if (isLoading) {
+        return (
+            <div className="p-4 bg-white/5 rounded-xl border border-white/10 animate-pulse">
+                <div className="h-4 bg-white/10 rounded w-2/3 mb-3" />
+                <div className="h-3 bg-white/10 rounded w-full" />
+            </div>
+        );
+    }
+
+    if (recommendations.length === 0) return null;
+
+    const rec = recommendations[0];
+
     return (
-        <div className="bg-gradient-to-br from-indigo-50 to-white p-6 rounded-xl border border-indigo-100 shadow-sm">
-            <h3 className="text-lg font-bold text-slate-800 mb-4 flex items-center">
-                <Lightbulb size={20} className="mr-2 text-indigo-600" />
-                AI Recommendations
-            </h3>
-            <div className="space-y-4">
-                {recommendations.map((rec) => (
-                    <div key={rec.id} className="bg-white p-4 rounded-lg border border-slate-100 shadow-sm flex flex-col sm:flex-row items-start sm:space-x-4 space-y-3 sm:space-y-0 hover:shadow-md transition-shadow">
-                        <div className="bg-slate-50 p-2 rounded-lg shrink-0">
-                            {getIcon(rec.icon)}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                            <h4 className="font-bold text-slate-900 text-sm truncate">{rec.title}</h4>
-                            <p className="text-xs text-slate-500 mt-1 mb-2 line-clamp-2">{rec.description}</p>
-                            <Link href={rec.action} className="text-indigo-600 text-xs font-bold flex items-center hover:underline">
-                                Take Action <ArrowRight size={12} className="ml-1" />
-                            </Link>
-                        </div>
-                    </div>
-                ))}
+        <div className="p-4 bg-gradient-to-br from-devpulse-blue-600/20 to-transparent rounded-xl border border-devpulse-blue-500/20 backdrop-blur-sm">
+            <div className="flex items-start gap-3">
+                <div className="p-2 bg-devpulse-yellow-500/20 rounded-lg shrink-0">
+                    {getIcon(rec.icon)}
+                </div>
+                <div className="flex-1 min-w-0">
+                    <h4 className="font-bold text-white text-sm mb-1">{rec.title}</h4>
+                    <p className="text-xs text-neutral-400 mb-2 line-clamp-2">{rec.description}</p>
+                    <Link
+                        href={rec.action}
+                        className="inline-flex items-center gap-1 text-devpulse-yellow-400 text-xs font-bold hover:text-devpulse-yellow-300 transition-colors"
+                    >
+                        Take Action <ArrowRight size={10} />
+                    </Link>
+                </div>
             </div>
         </div>
     );

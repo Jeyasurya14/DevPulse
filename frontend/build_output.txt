@@ -1,0 +1,64 @@
+
+> frontend@0.1.0 build
+> next build
+
+ΓÜá Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of C:\Users\jeyas\package-lock.json as the root directory.
+ To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory for more information.
+ Detected additional lockfiles: 
+   * C:\Users\jeyas\OneDrive\Desktop\Devpulse\frontend\package-lock.json
+
+Γû▓ Next.js 16.1.1 (Turbopack)
+- Environments: .env.local, .env
+
+  Creating an optimized production build ...
+Found 1 warning while optimizing generated CSS:
+
+Γöé   --color-border: #334155;
+Γöé }
+Γöé @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+Γöå        ^-- @import rules must precede all rules aside from @charset and @layer statements
+Γöå
+Γöé body {
+Γöé   color: var(--color-text-primary);
+
+Γ£ô Compiled successfully in 2.4s
+  Running TypeScript ...
+  Collecting page data using 15 workers ...
+  Generating static pages using 15 workers (0/22) ...
+The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the
+       height and width.
+  Generating static pages using 15 workers (5/22) 
+  Generating static pages using 15 workers (10/22) 
+  Generating static pages using 15 workers (16/22) 
+Γ£ô Generating static pages using 15 workers (22/22) in 434.6ms
+  Finalizing page optimization ...
+
+Route (app)
+Γöî Γùï /
+Γö£ Γùï /_not-found
+Γö£ Γùï /contact
+Γö£ Γùï /dashboard
+Γö£ Γùï /dashboard/admin
+Γö£ Γùï /dashboard/analysis
+Γö£ Γùï /dashboard/analytics
+Γö£ Γùï /dashboard/collaboration
+Γö£ Γùï /dashboard/goals
+Γö£ Γùï /dashboard/integrations
+Γö£ Γùï /dashboard/resources
+Γö£ Γùï /dashboard/settings
+Γö£ Γùï /features
+Γö£ Γùï /login
+Γö£ Γùï /pricing
+Γö£ Γùï /privacy-policy
+Γö£ Γùï /refund-policy
+Γö£ Γùï /register
+Γö£ Γùï /shipping-policy
+Γöö Γùï /terms-of-service
+
+
+Γùï  (Static)  prerendered as static content
+

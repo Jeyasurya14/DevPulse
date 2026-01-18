@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { Bell, Check, X, Info, CheckCircle, AlertTriangle, AlertCircle } from 'lucide-react';
+import { Bell, Check, X, Info, CheckCircle, AlertTriangle, AlertCircle, Settings, Clock } from 'lucide-react';
 import { fetchAPI } from '@/lib/api';
 import Link from 'next/link';
 
@@ -59,12 +59,10 @@ export default function NotificationBell() {
 
     useEffect(() => {
         fetchNotifications();
-        // Poll every 30 seconds
         const interval = setInterval(fetchNotifications, 30000);
         return () => clearInterval(interval);
     }, []);
 
-    // Close dropdown when clicking outside
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -77,90 +75,154 @@ export default function NotificationBell() {
 
     const getIcon = (type: string) => {
         switch (type) {
-            case 'success': return <CheckCircle size={16} className="text-green-500" />;
-            case 'warning': return <AlertTriangle size={16} className="text-yellow-500" />;
-            case 'error': return <AlertCircle size={16} className="text-red-500" />;
-            default: return <Info size={16} className="text-brand-500" />;
+            case 'success': return <CheckCircle size={16} className="text-success-500" />;
+            case 'warning': return <AlertTriangle size={16} className="text-warning-500" />;
+            case 'error': return <AlertCircle size={16} className="text-error-500" />;
+            default: return <Info size={16} className="text-devpulse-blue-500" />;
         }
+    };
+
+    const getTimeAgo = (dateStr: string) => {
+        const date = new Date(dateStr);
+        const now = new Date();
+        const diffMs = now.getTime() - date.getTime();
+        const diffMins = Math.floor(diffMs / 60000);
+        const diffHours = Math.floor(diffMs / 3600000);
+        const diffDays = Math.floor(diffMs / 86400000);
+
+        if (diffMins < 1) return 'Just now';
+        if (diffMins < 60) return `${diffMins}m ago`;
+        if (diffHours < 24) return `${diffHours}h ago`;
+        return `${diffDays}d ago`;
     };
 
     return (
         <div className="relative" ref={dropdownRef}>
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="p-2 bg-white rounded-full text-slate-400 hover:text-brand-600 shadow-sm border border-slate-100 transition-colors relative"
+                className="p-2 rounded-lg text-neutral-500 hover:text-devpulse-blue-600 hover:bg-devpulse-blue-50 transition-colors relative"
             >
                 <Bell size={20} />
                 {unreadCount > 0 && (
-                    <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white animate-pulse"></span>
+                    <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] flex items-center justify-center bg-error-500 text-white text-[10px] font-bold rounded-full border-2 border-white">
+                        {unreadCount > 9 ? '9+' : unreadCount}
+                    </span>
                 )}
             </button>
 
             {isOpen && (
-                <div className="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-xl border border-slate-100 overflow-hidden z-50">
-                    <div className="p-3 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-                        <h3 className="font-bold text-sm text-slate-700">Notifications</h3>
-                        {unreadCount > 0 && (
-                            <button
-                                onClick={markAllRead}
-                                className="text-xs text-brand-600 hover:text-brand-800 font-medium"
-                                disabled={isLoading}
+                <div className="absolute right-0 mt-2 w-96 bg-white rounded-2xl shadow-2xl border border-neutral-100 overflow-hidden z-50 animate-scale-in">
+                    {/* Header */}
+                    <div className="p-4 border-b border-neutral-100 flex justify-between items-center">
+                        <div>
+                            <h3 className="font-bold text-neutral-900">Notifications</h3>
+                            {unreadCount > 0 && (
+                                <p className="text-xs text-neutral-500">{unreadCount} unread</p>
+                            )}
+                        </div>
+                        <div className="flex items-center gap-2">
+                            {unreadCount > 0 && (
+                                <button
+                                    onClick={markAllRead}
+                                    className="text-xs text-devpulse-blue-600 hover:text-devpulse-blue-700 font-semibold px-2 py-1 rounded-lg hover:bg-devpulse-blue-50 transition-colors"
+                                    disabled={isLoading}
+                                >
+                                    Mark all read
+                                </button>
+                            )}
+                            <Link
+                                href="/dashboard/settings/notifications"
+                                className="p-1.5 text-neutral-400 hover:text-neutral-600 hover:bg-neutral-50 rounded-lg transition-colors"
+                                onClick={() => setIsOpen(false)}
                             >
-                                Mark all read
-                            </button>
-                        )}
+                                <Settings size={16} />
+                            </Link>
+                        </div>
                     </div>
 
-                    <div className="max-h-96 overflow-y-auto">
+                    {/* Notifications List */}
+                    <div className="max-h-[420px] overflow-y-auto scrollbar-thin">
                         {notifications.length === 0 ? (
-                            <div className="p-8 text-center text-slate-400">
-                                <Bell size={32} className="mx-auto mb-2 opacity-50" />
-                                <p className="text-sm">No notifications yet</p>
+                            <div className="p-12 text-center">
+                                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-neutral-50 flex items-center justify-center">
+                                    <Bell size={28} className="text-neutral-300" />
+                                </div>
+                                <p className="font-semibold text-neutral-700 mb-1">All caught up!</p>
+                                <p className="text-sm text-neutral-400">No notifications at the moment</p>
                             </div>
                         ) : (
-                            <div className="divide-y divide-slate-50">
+                            <div>
                                 {notifications.map((notification) => (
                                     <div
                                         key={notification.id}
-                                        className={`p-4 hover:bg-slate-50 transition-colors flex gap-3 ${!notification.is_read ? 'bg-brand-50/50' : ''}`}
+                                        className={`p-4 hover:bg-neutral-50 transition-colors flex gap-3 border-b border-neutral-50 last:border-0 ${!notification.is_read ? 'bg-devpulse-blue-50/30' : ''
+                                            }`}
                                     >
-                                        <div className="mt-1 shrink-0">
+                                        <div className={`mt-0.5 shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${notification.notification_type === 'success' ? 'bg-success-50' :
+                                                notification.notification_type === 'warning' ? 'bg-warning-50' :
+                                                    notification.notification_type === 'error' ? 'bg-error-50' :
+                                                        'bg-devpulse-blue-50'
+                                            }`}>
                                             {getIcon(notification.notification_type)}
                                         </div>
                                         <div className="flex-1 min-w-0">
-                                            <p className={`text-sm ${!notification.is_read ? 'font-bold text-slate-800' : 'text-slate-600'}`}>
-                                                {notification.title}
-                                            </p>
-                                            <p className="text-xs text-slate-500 mt-0.5 line-clamp-2">
+                                            <div className="flex items-start justify-between gap-2">
+                                                <p className={`text-sm leading-snug ${!notification.is_read
+                                                        ? 'font-semibold text-neutral-900'
+                                                        : 'text-neutral-700'
+                                                    }`}>
+                                                    {notification.title}
+                                                </p>
+                                                {!notification.is_read && (
+                                                    <button
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            markAsRead(notification.id);
+                                                        }}
+                                                        className="shrink-0 w-5 h-5 rounded-full bg-devpulse-blue-100 text-devpulse-blue-600 hover:bg-devpulse-blue-200 flex items-center justify-center transition-colors"
+                                                        title="Mark as read"
+                                                    >
+                                                        <Check size={12} />
+                                                    </button>
+                                                )}
+                                            </div>
+                                            <p className="text-xs text-neutral-500 mt-0.5 line-clamp-2">
                                                 {notification.message}
                                             </p>
-                                            <p className="text-[10px] text-slate-400 mt-1">
-                                                {new Date(notification.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                            </p>
-                                            {notification.action_link && (
-                                                <Link
-                                                    href={notification.action_link}
-                                                    className="mt-2 text-xs text-brand-600 font-bold block hover:underline"
-                                                    onClick={() => setIsOpen(false)}
-                                                >
-                                                    View Details
-                                                </Link>
-                                            )}
+                                            <div className="flex items-center gap-3 mt-2">
+                                                <span className="text-[11px] text-neutral-400 flex items-center gap-1">
+                                                    <Clock size={10} />
+                                                    {getTimeAgo(notification.created_at)}
+                                                </span>
+                                                {notification.action_link && (
+                                                    <Link
+                                                        href={notification.action_link}
+                                                        className="text-[11px] text-devpulse-blue-600 font-semibold hover:underline"
+                                                        onClick={() => setIsOpen(false)}
+                                                    >
+                                                        View Details →
+                                                    </Link>
+                                                )}
+                                            </div>
                                         </div>
-                                        {!notification.is_read && (
-                                            <button
-                                                onClick={() => markAsRead(notification.id)}
-                                                className="text-slate-300 hover:text-blue-600 shrink-0"
-                                                title="Mark as read"
-                                            >
-                                                <Check size={14} />
-                                            </button>
-                                        )}
                                     </div>
                                 ))}
                             </div>
                         )}
                     </div>
+
+                    {/* Footer */}
+                    {notifications.length > 0 && (
+                        <div className="p-3 border-t border-neutral-100 bg-neutral-50">
+                            <Link
+                                href="/dashboard/alerts"
+                                className="block w-full text-center text-sm font-semibold text-devpulse-blue-600 hover:text-devpulse-blue-700 py-2 rounded-lg hover:bg-white transition-colors"
+                                onClick={() => setIsOpen(false)}
+                            >
+                                View All Notifications
+                            </Link>
+                        </div>
+                    )}
                 </div>
             )}
         </div>

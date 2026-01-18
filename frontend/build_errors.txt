@@ -1,0 +1,3 @@
+app/pricing/page.tsx(249,77): error TS18047: 'plan.price.monthly' is possibly 'null'.
+app/pricing/page.tsx(251,61): error TS18047: 'plan.price.monthly' is possibly 'null'.
+app/pricing/page.tsx(251,82): error TS18047: 'plan.price.annually' is possibly 'null'.
