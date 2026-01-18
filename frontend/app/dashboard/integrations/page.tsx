@@ -36,7 +36,7 @@ interface Integration {
 }
 
 export default function IntegrationsPage() {
-    const { data: integrations, error, mutate, isLoading } = useSWR<Integration[]>('/api/integrations/', fetcher);
+    const { data: integrations, error, mutate, isLoading } = useSWR<Integration[]>('/api/dashboard/integrations/', fetcher);
 
     const [selectedIntegration, setSelectedIntegration] = useState<Integration | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
@@ -102,14 +102,14 @@ export default function IntegrationsPage() {
                             key={tab.id}
                             onClick={() => setActiveTab(tab.id as any)}
                             className={`px-4 py-3 text-sm font-semibold transition-colors border-b-2 -mb-px ${activeTab === tab.id
-                                    ? 'text-devpulse-blue-600 border-devpulse-blue-600'
-                                    : 'text-neutral-500 border-transparent hover:text-neutral-700'
+                                ? 'text-devpulse-blue-600 border-devpulse-blue-600'
+                                : 'text-neutral-500 border-transparent hover:text-neutral-700'
                                 }`}
                         >
                             {tab.label}
                             <span className={`ml-2 px-2 py-0.5 rounded-full text-xs ${activeTab === tab.id
-                                    ? 'bg-devpulse-blue-50 text-devpulse-blue-600'
-                                    : 'bg-neutral-100 text-neutral-500'
+                                ? 'bg-devpulse-blue-50 text-devpulse-blue-600'
+                                : 'bg-neutral-100 text-neutral-500'
                                 }`}>
                                 {tab.count}
                             </span>
@@ -152,8 +152,8 @@ export default function IntegrationsPage() {
                                 >
                                     <div className="flex items-start justify-between mb-4">
                                         <div className={`p-3.5 rounded-xl transition-colors ${integration.connected
-                                                ? 'bg-devpulse-blue-50 text-devpulse-blue-600'
-                                                : 'bg-neutral-50 text-neutral-400 group-hover:bg-devpulse-blue-50 group-hover:text-devpulse-blue-600'
+                                            ? 'bg-devpulse-blue-50 text-devpulse-blue-600'
+                                            : 'bg-neutral-50 text-neutral-400 group-hover:bg-devpulse-blue-50 group-hover:text-devpulse-blue-600'
                                             }`}>
                                             {getIcon(integration.provider)}
                                         </div>

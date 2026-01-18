@@ -10,9 +10,11 @@ import {
     Target,
     ChevronRight
 } from 'lucide-react';
-import { mockBenchmarks } from '@/lib/mockData';
+import { fetchAPI } from '@/lib/api';
+import useSWR from 'swr';
 
 export default function BenchmarksPage() {
+    const { data: apiBenchmarks, isLoading } = useSWR('/api/dashboard/benchmarks/', fetchAPI);
     const [selectedMetric, setSelectedMetric] = useState<string | null>(null);
 
     const getPerformanceLevel = (value: number, industryAvg: number, elite: number, isLowerBetter: boolean = false) => {
@@ -27,31 +29,38 @@ export default function BenchmarksPage() {
         }
     };
 
+    const benchmarks = apiBenchmarks || {
+        deploymentFrequency: { value: 0, industryAvg: 0, elite: 0, label: "Deployment Frequency" },
+        leadTime: { value: 0, industryAvg: 0, elite: 0, label: "Lead Time" },
+        changeFailureRate: { value: 0, industryAvg: 0, elite: 0, label: "Change Failure Rate" },
+        mttr: { value: 0, industryAvg: 0, elite: 0, label: "MTTR" },
+    };
+
     const metrics = [
         {
             key: 'deploymentFrequency',
-            ...mockBenchmarks.deploymentFrequency,
+            ...benchmarks.deploymentFrequency,
             unit: '/day',
             description: 'How often your team deploys to production',
             isLowerBetter: false
         },
         {
             key: 'leadTime',
-            ...mockBenchmarks.leadTime,
+            ...benchmarks.leadTime,
             unit: 'hrs',
             description: 'Time from code commit to production deployment',
             isLowerBetter: true
         },
         {
             key: 'changeFailureRate',
-            ...mockBenchmarks.changeFailureRate,
+            ...benchmarks.changeFailureRate,
             unit: '%',
             description: 'Percentage of deployments causing failures',
             isLowerBetter: true
         },
         {
             key: 'mttr',
-            ...mockBenchmarks.mttr,
+            ...benchmarks.mttr,
             unit: 'min',
             description: 'Mean time to recover from incidents',
             isLowerBetter: true

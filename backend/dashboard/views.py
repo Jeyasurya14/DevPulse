@@ -153,3 +153,38 @@ class TeamMemberList(APIView):
         del member['_id']
         
         return Response(member, status=status.HTTP_201_CREATED)
+
+class IntegrationList(APIView):
+    def get(self, request):
+        # Seeded Integrations Data
+        integrations = [
+            {"name": "GitHub", "provider": "github", "description": "Sync code repositories and track PRs.", "connected": True, "last_synced": "10 min ago"},
+            {"name": "Slack", "provider": "slack", "description": "Get real-time alerts and notifications.", "connected": True, "last_synced": "1 hour ago"},
+            {"name": "Jira", "provider": "jira", "description": "Track issues and project progress.", "connected": False},
+            {"name": "GitLab", "provider": "gitlab", "description": "CI/CD pipelines and source control.", "connected": False},
+            {"name": "Trello", "provider": "trello", "description": "Kanban boards for task management.", "connected": False},
+        ]
+        return Response(integrations)
+
+class BenchmarkList(APIView):
+    def get(self, request):
+        # Seeded DORA Benchmarks
+        benchmarks = {
+            "deploymentFrequency": {"value": 12.4, "industryAvg": 8.2, "elite": 15, "label": "Deployment Frequency"},
+            "leadTime": {"value": 2.3, "industryAvg": 4.5, "elite": 1, "label": "Lead Time (hours)"},
+            "changeFailureRate": {"value": 4.2, "industryAvg": 15, "elite": 5, "label": "Change Failure Rate (%)"},
+            "mttr": {"value": 23, "industryAvg": 60, "elite": 15, "label": "MTTR (minutes)"},
+        }
+        return Response(benchmarks)
+
+class AlertList(APIView):
+    def get(self, request):
+        # Seeded Alerts Data
+        alerts = [
+            {"id": 1, "name": "Deployment Failure", "type": "deployment", "enabled": True, "channels": ["slack", "email"], "threshold": "any failure"},
+            {"id": 2, "name": "High Error Rate", "type": "performance", "enabled": True, "channels": ["slack"], "threshold": "> 5%"},
+            {"id": 3, "name": "Security Vulnerability", "type": "security", "enabled": True, "channels": ["email", "slack"], "threshold": "critical/high"},
+            {"id": 4, "name": "PR Review Stale", "type": "workflow", "enabled": False, "channels": ["slack"], "threshold": "> 48 hours"},
+            {"id": 5, "name": "Low Test Coverage", "type": "quality", "enabled": True, "channels": ["email"], "threshold": "< 80%"},
+        ]
+        return Response(alerts)

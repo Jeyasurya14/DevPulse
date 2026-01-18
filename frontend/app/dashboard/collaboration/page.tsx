@@ -17,7 +17,7 @@ interface TeamMember {
 }
 
 export default function CollaborationPage() {
-    const { data: members, error, mutate, isLoading } = useSWR<TeamMember[]>('/api/team/', fetcher);
+    const { data: members, error, mutate, isLoading } = useSWR<TeamMember[]>('/api/dashboard/team/members/', fetcher);
 
     // Mock data for display if API returns 404 (optional, but good for demo continuity if backend is missing)
     // For production hardening, we usually accept the error. 
@@ -113,8 +113,8 @@ function MemberRow({ member }: { member: TeamMember }) {
         <div className={`p-6 flex items-center justify-between transition-colors hover:bg-slate-50/80 group ${isPending ? 'opacity-75' : ''}`}>
             <div className="flex items-center gap-4">
                 <div className={`h-12 w-12 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-md ${isPending
-                        ? 'bg-slate-200 text-slate-400'
-                        : 'bg-gradient-to-br from-indigo-500 to-purple-600'
+                    ? 'bg-slate-200 text-slate-400'
+                    : 'bg-gradient-to-br from-indigo-500 to-purple-600'
                     }`}>
                     {isPending ? <Mail size={20} /> : initials}
                 </div>
@@ -131,10 +131,10 @@ function MemberRow({ member }: { member: TeamMember }) {
 
             <div className="flex items-center gap-6">
                 <span className={`px-3 py-1 text-xs font-bold rounded-full border ${member.role === 'admin'
-                        ? 'bg-indigo-50 text-indigo-700 border-indigo-100'
-                        : isPending
-                            ? 'bg-amber-50 text-amber-700 border-amber-100'
-                            : 'bg-slate-100 text-slate-700 border-slate-200'
+                    ? 'bg-indigo-50 text-indigo-700 border-indigo-100'
+                    : isPending
+                        ? 'bg-amber-50 text-amber-700 border-amber-100'
+                        : 'bg-slate-100 text-slate-700 border-slate-200'
                     }`}>
                     {isPending ? 'Pending Invite' : member.role.charAt(0).toUpperCase() + member.role.slice(1)}
                 </span>

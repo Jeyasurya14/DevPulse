@@ -19,10 +19,21 @@ import {
     ToggleRight,
     Clock
 } from 'lucide-react';
-import { mockAlerts } from '@/lib/mockData';
+import { fetchAPI } from '@/lib/api';
+import useSWR from 'swr';
 
 export default function AlertsPage() {
-    const [alerts, setAlerts] = useState(mockAlerts);
+    const { data: apiAlerts, isLoading } = useSWR('/api/dashboard/alerts/', fetchAPI);
+    const [localAlerts, setLocalAlerts] = useState<any[]>([]);
+
+    // Sync state when API data arrives
+    React.useEffect(() => {
+        if (apiAlerts) {
+            setLocalAlerts(apiAlerts);
+        }
+    }, [apiAlerts]);
+
+    const alerts = localAlerts.length > 0 ? localAlerts : (apiAlerts || []);
 
     const recentAlertHistory = [
         { message: 'Deployment to production completed successfully', type: 'success', time: '2 min ago' },
@@ -33,7 +44,7 @@ export default function AlertsPage() {
     ];
 
     const toggleAlert = (id: number) => {
-        setAlerts(alerts.map(a => a.id === id ? { ...a, enabled: !a.enabled } : a));
+        setLocalAlerts(alerts.map((a: any) => a.id === id ? { ...a, enabled: !a.enabled } : a));
     };
 
     const getTypeIcon = (type: string) => {
@@ -77,7 +88,7 @@ export default function AlertsPage() {
                             Alert Rules
                         </h2>
 
-                        {alerts.map((alert) => (
+                        {alerts.map((alert: any) => (
                             <div
                                 key={alert.id}
                                 className={`bg-white p-5 rounded-xl border shadow-card transition-all ${alert.enabled ? 'border-devpulse-blue-100' : 'border-neutral-100 opacity-75'
